@@ -1,3 +1,5 @@
 GET https://localhost:8002/api/v1/companylocation
 ###
 GET https://localhost:8001/api/v1/companylocation
+###
+GET https://localhost:8000/api/v1/companylocation
