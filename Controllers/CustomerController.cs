@@ -12,9 +12,9 @@ namespace i21Apis.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly Tenant tenant;
-        private readonly TenantDbContext dbContext;
+        private readonly DbContext dbContext;
 
-        public CustomerController(Tenant tenant, TenantDbContext dbContext)
+        public CustomerController(Tenant tenant, DbContext dbContext)
         {
             this.tenant = tenant;
             this.dbContext = dbContext;

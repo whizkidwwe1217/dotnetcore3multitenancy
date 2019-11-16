@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using i21Apis.Models;
 using i21Apis.Multitenancy;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace i21Apis
 {
@@ -29,8 +23,14 @@ namespace i21Apis
         {
             services.AddLogging();
             services.AddMultitenancy<Tenant, DefaultTenantResolver>();
-            services.AddDbContext<TenantDbContext>(options => {
-                
+
+            services.AddScoped<DbContext>(provider =>
+            {
+                var tenant = provider.GetRequiredService<Tenant>();
+
+                if (tenant.Engine.Equals("MSSQL"))
+                    return provider.GetRequiredService<TenantDbContext>();
+                return provider.GetRequiredService<SqliteDbContext>();
             });
 
             services.Scan(scanner =>

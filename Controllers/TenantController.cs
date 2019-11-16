@@ -1,7 +1,9 @@
+using System.Linq;
 using System.Threading.Tasks;
 using i21Apis.Models;
 using i21Apis.Multitenancy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace i21Apis.Controllers
 {
@@ -9,17 +11,17 @@ namespace i21Apis.Controllers
     [Route("api/v1/[controller]")]
     public class TenantController : ControllerBase
     {
-        private readonly Tenant tenant;
+        private readonly CatalogDbContext catalog;
 
-        public TenantController(Tenant tenant)
+        public TenantController(CatalogDbContext catalog)
         {
-            this.tenant = tenant;
+            this.catalog = catalog;
         }
 
         public async Task<IActionResult> Get()
         {
-            var data = new string[] { "Hello World", tenant?.Name };
-            return await Task.FromResult(Ok(data));
+            var data = await catalog.Tenant.ToListAsync();
+            return Ok(data);
         }
     }
 }
