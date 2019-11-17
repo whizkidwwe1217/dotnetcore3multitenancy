@@ -11,6 +11,6 @@ namespace i21Apis.Models
         public string Name { get; set; }
         public string ConnectionString { get; set; }
         public string HostName { get; set; }
-        public string Engine { get; set; } = "MSSQL";
+        public string DatabaseProvider { get; set; } = "SqlServer";
     }
 }

@@ -38,9 +38,14 @@ namespace i21Apis
             {
                 var tenant = provider.GetRequiredService<Tenant>();
 
-                if (tenant.Engine.Equals("MSSQL"))
+                if (tenant.DatabaseProvider.Equals("SqlServer"))
                     return provider.GetRequiredService<SqlServerDbContextConfigurationBuilder>();
-                return provider.GetRequiredService<SqliteDbContextConfigurationBuilder>();
+                else if (tenant.DatabaseProvider.Equals("MySql"))
+                    return provider.GetRequiredService<MySqlDbContextConfigurationBuilder>();
+                else if (tenant.DatabaseProvider.Equals("Sqlite"))
+                    return provider.GetRequiredService<SqliteDbContextConfigurationBuilder>();
+                else
+                    throw new System.InvalidOperationException("Invalid database provider.");
             });
 
             services.AddScoped<DbContext, TenantDbContext>();
