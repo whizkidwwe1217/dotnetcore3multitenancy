@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using i21Apis.Models;
 using i21Apis.Multitenancy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace i21Apis.Controllers
 {
@@ -9,9 +10,9 @@ namespace i21Apis.Controllers
     [Route("api/v1/[controller]")]
     public class CatalogController : ControllerBase
     {
-        private readonly TenantDbContext context;
+        private readonly DbContext context;
 
-        public CatalogController(TenantDbContext context)
+        public CatalogController(DbContext context)
         {
             this.context = context;
         }

@@ -1,7 +1,6 @@
-using System.Linq;
 using System.Threading.Tasks;
+using i21Apis.Data;
 using i21Apis.Models;
-using i21Apis.Multitenancy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
