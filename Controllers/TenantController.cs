@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using i21Apis.Data;
 using i21Apis.Repositories;
@@ -8,21 +9,19 @@ namespace i21Apis.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [FormatFilter]
     public class TenantController : ControllerBase
     {
-        private readonly ICustomerRepository repository;
+        private readonly ITenantDbMigrator migrator;
 
-        public TenantController(ICustomerRepository repository)
+        public TenantController(ITenantDbMigrator repository)
         {
-            this.repository = repository;
+            this.migrator = repository;
         }
 
-        [HttpGet("{format?}")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var data = await repository.ListAsync();
-            return Ok(data);
+            await migrator.MigrateAsync(cancellationToken);
+            return Ok(true);
         }
     }
 }

@@ -9,8 +9,8 @@ namespace i21Apis.Data.Design
         protected override TenantSqliteDbContext CreateDbContext(IConfiguration configuration, string provider)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantSqliteDbContext>();
-            var tenant = new Tenant { DatabaseProvider = "Sqlite", ConnectionString = ConnectionStringTemplates.MYSQL };
-            var builder = new MySqlDbContextConfigurationBuilder(configuration, tenant);
+            var tenant = new Tenant { DatabaseProvider = "Sqlite", ConnectionString = ConnectionStringTemplates.SQLITE };
+            var builder = new SqliteDbContextConfigurationBuilder(configuration, tenant);
             return new TenantSqliteDbContext(configuration, tenant, builder, optionsBuilder.Options);
         }
     }

@@ -9,6 +9,7 @@ namespace i21Apis.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
+    [FormatFilter]
     public class CatalogController : ControllerBase
     {
         private readonly CatalogDbContext catalog;

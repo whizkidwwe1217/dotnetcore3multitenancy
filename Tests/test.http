@@ -1,6 +1,6 @@
-GET https://localhost:8002/api/v1/catalog/xml
+GET https://127.0.0.1:8002/api/v1/catalog/xml
 ###
-GET https://localhost:8002/api/v1/catalog
+GET https://mydomain.com/api/v1/catalog
 ###
 GET https://localhost:8001/api/v1/customer
 ###
@@ -11,4 +11,4 @@ GET https://localhost:8002/api/v1/customer
 ###
 GET https://localhost:8000/health
 ###
-GET https://localhost:8002/api/v1/tenant
+GET https://localhost:8003/api/v1/tenant

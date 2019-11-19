@@ -13,7 +13,9 @@ namespace i21Apis.Data
             services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
             services.For<IDbContextConfigurationBuilder>().Use(provider =>
             {
-                var tenant = provider.GetService<TTenant>();
+                var tenant = provider.GetRequiredService<TTenant>();
+                if (tenant == null) throw new System.NullReferenceException("Tenant not found.");
+
                 if (tenant.DatabaseProvider.Equals("SqlServer"))
                     return provider.GetService<SqlServerDbContextConfigurationBuilder>();
                 else if (tenant.DatabaseProvider.Equals("MySql"))
@@ -23,23 +25,18 @@ namespace i21Apis.Data
                 else
                     throw new System.InvalidOperationException("Invalid database provider.");
             });
-            
+
             services.For<DbContext>().Use(provider =>
             {
-                var tenant = provider.GetService<Tenant>();
+                var tenant = provider.GetRequiredService<Tenant>();
+                if (tenant == null) throw new System.NullReferenceException("Tenant not found.");
 
                 if (tenant.DatabaseProvider.Equals("SqlServer"))
-                {
                     return provider.GetService<TenantSqlServerDbContext>();
-                }
                 else if (tenant.DatabaseProvider.Equals("MySql"))
-                {
                     return provider.GetService<TenantMySqlDbContext>();
-                }
                 else if (tenant.DatabaseProvider.Equals("Sqlite"))
-                {
                     return provider.GetService<TenantSqliteDbContext>();
-                }
                 else
                     throw new System.InvalidOperationException("Invalid database provider.");
             });

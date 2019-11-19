@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace i21Apis.Migrations.SqlServer
@@ -12,14 +12,17 @@ namespace i21Apis.Migrations.SqlServer
                 columns: table => new
                 {
                     intEntityId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     strCustomerNumber = table.Column<string>(nullable: true),
                     strType = table.Column<string>(nullable: true),
                     dblCreditLimit = table.Column<decimal>(nullable: true),
                     dblARBalance = table.Column<decimal>(nullable: true),
                     strAccountNumber = table.Column<string>(nullable: true),
                     strTaxNumber = table.Column<string>(nullable: true),
-                    strCurrency = table.Column<string>(nullable: true)
+                    strCurrency = table.Column<string>(nullable: true),
+                    Id = table.Column<int>(nullable: false),
+                    ConcurrencyStamp = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    ConcurrencyTimeStamp = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,7 +34,7 @@ namespace i21Apis.Migrations.SqlServer
                 columns: table => new
                 {
                     intCompanyLocationId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     strLocationName = table.Column<string>(nullable: true),
                     strLocationNumber = table.Column<string>(nullable: true),
                     strLocationType = table.Column<string>(nullable: true),

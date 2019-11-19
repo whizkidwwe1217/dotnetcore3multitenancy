@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using i21Apis.Data;
 using i21Apis.Models;
 using i21Apis.Multitenancy;
+using i21Apis.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,19 +13,18 @@ namespace i21Apis.Controllers
     [Route("api/v1/[controller]")]
     public class CustomerController : ControllerBase
     {
-        private readonly Tenant tenant;
-        private readonly DbContext db;
+        private readonly ICustomerRepository repository;
 
-        public CustomerController(Tenant tenant, DbContext context)
+        public CustomerController(ICustomerRepository repository)
         {
-            this.tenant = tenant;
-            this.db = context;
+            this.repository = repository;
         }
 
+        [HttpGet("{format?}")]
         public async Task<IActionResult> Get()
         {
-            var customers = await db.Set<tblARCustomer>().ToListAsync();
-            return await Task.FromResult(Ok(customers));
+            var data = await repository.ListAsync();
+            return Ok(data);
         }
     }
 }
