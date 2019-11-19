@@ -1,4 +1,5 @@
 using i21Apis.Models;
+using i21Apis.Repositories;
 using Lamar;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,12 +8,12 @@ namespace i21Apis.Data
 {
     public static class DatabaseExtensions
     {
-        public static ServiceRegistry AddMultiDbContext(this ServiceRegistry services)
+        public static ServiceRegistry AddMultiDbContext<TTenant>(this ServiceRegistry services) where TTenant : ITenant
         {
+            services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
             services.For<IDbContextConfigurationBuilder>().Use(provider =>
             {
-                var tenant = provider.GetService<Tenant>();
-
+                var tenant = provider.GetService<TTenant>();
                 if (tenant.DatabaseProvider.Equals("SqlServer"))
                     return provider.GetService<SqlServerDbContextConfigurationBuilder>();
                 else if (tenant.DatabaseProvider.Equals("MySql"))

@@ -2,11 +2,9 @@ using i21Apis.Data;
 using i21Apis.HealthChecks;
 using i21Apis.Models;
 using i21Apis.Multitenancy;
-using i21Apis.Repositories;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -25,7 +23,6 @@ namespace i21Apis
 
         public void ConfigureContainer(ServiceRegistry services)
         {
-            services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
             services.Scan(scanner =>
             {
                 scanner.TheCallingAssembly();
@@ -34,7 +31,7 @@ namespace i21Apis
 
             services.AddLogging();
             services.AddMultitenancy<Tenant, CachedDomainTenantResolver>();
-            services.AddMultiDbContext();
+            services.AddMultiDbContext<Tenant>();
             
             services.AddHealthChecks()
                 .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);

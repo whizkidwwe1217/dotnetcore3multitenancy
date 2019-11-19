@@ -1,3 +1,4 @@
+using i21Apis.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +42,8 @@ namespace i21Apis.Multitenancy
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(prov => prov.GetService<IHttpContextAccessor>()?.HttpContext?.GetTenantContext<TTenant>());
             services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
-
+            services.AddTransient(typeof(IRepositoryManager<>), typeof(RepositoryManager<>));
+            
             // Ensure caching is available for caching resolvers
             var resolverType = typeof(TResolver);
             if (typeof(MemoryCacheTenantResolver<TTenant>).IsAssignableFrom(resolverType))
