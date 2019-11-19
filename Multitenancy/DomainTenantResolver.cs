@@ -8,11 +8,11 @@ using i21Apis.Data;
 
 namespace i21Apis.Multitenancy
 {
-    public class DefaultTenantResolver : ITenantResolver<Tenant>
+    public class DomainTenantResolver : ITenantResolver<Tenant>
     {
         private readonly CatalogDbContext catalog;
 
-        public DefaultTenantResolver(CatalogDbContext catalog)
+        public DomainTenantResolver(CatalogDbContext catalog)
         {
             this.catalog = catalog;
         }
@@ -21,8 +21,12 @@ namespace i21Apis.Multitenancy
         {
             var hostname = context.Request.Host.Value.ToLower();
             var host = context.Request.Host;
+            var identifier = hostname.Substring(0, hostname.IndexOf("."));
 
-            Tenant tenant = await catalog.Set<Tenant>().Where(e => e.HostName.Contains(hostname)).FirstOrDefaultAsync();
+            // Tenant tenant = await catalog.Set<Tenant>().Where(e => e.HostName.Contains(hostname)).FirstOrDefaultAsync();
+            Tenant tenant = await catalog.Set<Tenant>()
+                .Where(e => e.Name.ToLower().Equals(identifier.ToLower()))
+                .FirstOrDefaultAsync();
             return await Task.FromResult(new TenantContext<Tenant>(tenant));
         }
     }

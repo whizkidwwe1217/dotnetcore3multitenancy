@@ -1,8 +1,10 @@
 GET https://127.0.0.1:8002/api/v1/catalog/xml
 ###
-GET https://mydomain.com/api/v1/catalog
+GET https://irely.hris.hordeflow.com/api/v1/customer
 ###
-GET https://localhost:8001/api/v1/customer
+GET https://hordeflow.hris.hordeflow.com/api/v1/customer
+###
+GET https://xyz.hris.hordeflow.com/api/v1/customer
 ###
 GET https://localhost:8000/api/v1/customer
 Accept: application/xml

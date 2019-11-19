@@ -18,7 +18,7 @@ namespace i21Apis
                 {
                     webBuilder
                         .UseStartup<Startup>()
-                        .UseUrls(new string[] { "https://*:8000", "https://*:8001", "https://*:8002", "https://*:8003" });
+                        .UseUrls(new string[] { "https://*.hris.hordeflow.com", "https://*:8001", "https://*:8002", "https://*:8003" });
                 });
     }
 }

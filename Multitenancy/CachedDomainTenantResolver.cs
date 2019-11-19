@@ -14,10 +14,10 @@ namespace i21Apis.Multitenancy
 {
     public class CachedDomainTenantResolver : MemoryCacheTenantResolver<Tenant>
     {
-        private readonly CatalogDbContext db;
-        public CachedDomainTenantResolver(CatalogDbContext db, IMemoryCache cache, ILoggerFactory loggerFactory) : base(cache, loggerFactory)
+        private readonly CatalogDbContext catalog;
+        public CachedDomainTenantResolver(CatalogDbContext catalog, IMemoryCache cache, ILoggerFactory loggerFactory) : base(cache, loggerFactory)
         {
-            this.db = db ?? throw new System.ArgumentNullException(nameof(db));
+            this.catalog = catalog ?? throw new System.ArgumentNullException(nameof(catalog));
         }
 
         private bool IsPathIsInCatalogWhitelist(string path)
@@ -43,8 +43,12 @@ namespace i21Apis.Multitenancy
         {
             var hostname = context.Request.Host.Value.ToLower();
             var host = context.Request.Host;
+            var identifier = hostname.Substring(0, hostname.IndexOf("."));
 
-            Tenant tenant = await db.Set<Tenant>().Where(e => e.HostName.Contains(hostname)).FirstOrDefaultAsync();
+            // Tenant tenant = await catalog.Set<Tenant>().Where(e => e.HostName.Contains(hostname)).FirstOrDefaultAsync();
+            Tenant tenant = await catalog.Set<Tenant>()
+                .Where(e => e.Name.ToLower().Equals(identifier.ToLower()))
+                .FirstOrDefaultAsync();
             return await Task.FromResult(new TenantContext<Tenant>(tenant));
         }
     }
