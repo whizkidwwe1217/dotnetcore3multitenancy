@@ -41,6 +41,14 @@ namespace i21Apis.Multitenancy
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(prov => prov.GetService<IHttpContextAccessor>()?.HttpContext?.GetTenantContext<TTenant>());
             services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
+
+            // Ensure caching is available for caching resolvers
+            var resolverType = typeof(TResolver);
+            if (typeof(MemoryCacheTenantResolver<TTenant>).IsAssignableFrom(resolverType))
+            {
+                services.AddMemoryCache();
+            }
+            
             return services;
         }
 

@@ -7,4 +7,6 @@ GET https://localhost:8001/api/v1/customer
 GET https://localhost:8000/api/v1/customer
 Accept: application/xml
 ###
+GET https://localhost:8002/api/v1/customer
+###
 GET https://localhost:8000/health

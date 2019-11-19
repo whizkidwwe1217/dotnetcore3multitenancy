@@ -31,25 +31,25 @@ namespace i21Apis
             });
 
             services.AddLogging();
-            services.AddMultitenancy<Tenant, DefaultTenantResolver>();
+            services.AddMultitenancy<Tenant, CachedDomainTenantResolver>();
 
             services.For<IDbContextConfigurationBuilder>().Use(provider =>
             {
-                var tenant = provider.GetRequiredService<Tenant>();
+                var tenant = provider.GetService<Tenant>();
 
                 if (tenant.DatabaseProvider.Equals("SqlServer"))
-                    return provider.GetRequiredService<SqlServerDbContextConfigurationBuilder>();
+                    return provider.GetService<SqlServerDbContextConfigurationBuilder>();
                 else if (tenant.DatabaseProvider.Equals("MySql"))
-                    return provider.GetRequiredService<MySqlDbContextConfigurationBuilder>();
+                    return provider.GetService<MySqlDbContextConfigurationBuilder>();
                 else if (tenant.DatabaseProvider.Equals("Sqlite"))
-                    return provider.GetRequiredService<SqliteDbContextConfigurationBuilder>();
+                    return provider.GetService<SqliteDbContextConfigurationBuilder>();
                 else
                     throw new System.InvalidOperationException("Invalid database provider.");
             });
             
             services.For<DbContext>().Use(provider =>
             {
-                var tenant = provider.GetRequiredService<Tenant>();
+                var tenant = provider.GetService<Tenant>();
 
                 if (tenant.DatabaseProvider.Equals("SqlServer"))
                 {

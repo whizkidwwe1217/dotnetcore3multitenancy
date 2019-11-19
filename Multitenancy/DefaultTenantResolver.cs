@@ -22,7 +22,7 @@ namespace i21Apis.Multitenancy
             var hostname = context.Request.Host.Value.ToLower();
             var host = context.Request.Host;
 
-            Tenant tenant = await catalog.Set<Tenant>().Where(e => e.HostName.Equals(hostname)).FirstOrDefaultAsync();
+            Tenant tenant = await catalog.Set<Tenant>().Where(e => e.HostName.Contains(hostname)).FirstOrDefaultAsync();
             return await Task.FromResult(new TenantContext<Tenant>(tenant));
         }
     }
