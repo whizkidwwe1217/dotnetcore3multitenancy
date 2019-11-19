@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using i21Apis.Data;
 using i21Apis.Models;
 using i21Apis.Multitenancy;
 using Microsoft.AspNetCore.Mvc;
@@ -10,17 +11,18 @@ namespace i21Apis.Controllers
     [Route("api/v1/[controller]")]
     public class CatalogController : ControllerBase
     {
-        private readonly DbContext context;
+        private readonly CatalogDbContext catalog;
 
-        public CatalogController(DbContext context)
+        public CatalogController(CatalogDbContext catalog)
         {
-            this.context = context;
+            this.catalog = catalog;
         }
 
+        [HttpGet("{format?}")]
         public async Task<IActionResult> Get()
         {
-            var data = new string[] { "Hello World" };
-            return await Task.FromResult(Ok(data));
+            var data = await catalog.Tenant.ToListAsync();
+            return Ok(data);
         }
     }
 }

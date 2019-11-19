@@ -2,6 +2,7 @@ using i21Apis.Data;
 using i21Apis.HealthChecks;
 using i21Apis.Models;
 using i21Apis.Multitenancy;
+using i21Apis.Repositories;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +25,7 @@ namespace i21Apis
 
         public void ConfigureContainer(ServiceRegistry services)
         {
+            services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
             services.Scan(scanner =>
             {
                 scanner.TheCallingAssembly();
@@ -32,41 +34,8 @@ namespace i21Apis
 
             services.AddLogging();
             services.AddMultitenancy<Tenant, CachedDomainTenantResolver>();
-
-            services.For<IDbContextConfigurationBuilder>().Use(provider =>
-            {
-                var tenant = provider.GetService<Tenant>();
-
-                if (tenant.DatabaseProvider.Equals("SqlServer"))
-                    return provider.GetService<SqlServerDbContextConfigurationBuilder>();
-                else if (tenant.DatabaseProvider.Equals("MySql"))
-                    return provider.GetService<MySqlDbContextConfigurationBuilder>();
-                else if (tenant.DatabaseProvider.Equals("Sqlite"))
-                    return provider.GetService<SqliteDbContextConfigurationBuilder>();
-                else
-                    throw new System.InvalidOperationException("Invalid database provider.");
-            });
+            services.AddMultiDbContext();
             
-            services.For<DbContext>().Use(provider =>
-            {
-                var tenant = provider.GetService<Tenant>();
-
-                if (tenant.DatabaseProvider.Equals("SqlServer"))
-                {
-                    return provider.GetService<TenantSqlServerDbContext>();
-                }
-                else if (tenant.DatabaseProvider.Equals("MySql"))
-                {
-                    return provider.GetService<TenantMySqlDbContext>();
-                }
-                else if (tenant.DatabaseProvider.Equals("Sqlite"))
-                {
-                    return provider.GetService<TenantSqliteDbContext>();
-                }
-                else
-                    throw new System.InvalidOperationException("Invalid database provider.");
-            });
-
             services.AddHealthChecks()
                 .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
         }

@@ -1,8 +1,9 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace i21Apis.Models
 {
-    public class tblARCustomer
+    public class tblARCustomer : IBaseEntity<int>
     {
         [Key]
         public int intEntityId { get; set; }
@@ -13,5 +14,10 @@ namespace i21Apis.Models
         public string strAccountNumber { get; set; }
         public string strTaxNumber { get; set; }
         public string strCurrency { get; set; }
+        public int Id { get; set; }
+
+        [Timestamp]
+        public byte[] ConcurrencyStamp { get; set; }
+        public DateTime? ConcurrencyTimeStamp { get; set; }
     }
 }
