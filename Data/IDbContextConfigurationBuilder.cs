@@ -4,6 +4,6 @@ namespace i21Apis.Data
 {
     public interface IDbContextConfigurationBuilder
     {
-        void OnConfiguring(DbContextOptionsBuilder optionsBuilder);
+        DbContextOptionsBuilder Build(DbContextOptionsBuilder optionsBuilder);
     }
 }

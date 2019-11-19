@@ -17,7 +17,7 @@ namespace i21Apis.Data
             this.tenant = tenant;
         }
 
-        public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DbContextOptionsBuilder Build(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = tenant.ConnectionString;
             optionsBuilder.UseMySql(connectionString,
@@ -25,6 +25,8 @@ namespace i21Apis.Data
                 {
                     mySqlOptions.ServerVersion(new Version(5, 7, 17), ServerType.MySql); // replace with your Server Version and Type
                 });
+
+            return optionsBuilder;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace i21Apis.Data
             this.tenant = tenant;
         }
 
-        public void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public DbContextOptionsBuilder Build(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = tenant.ConnectionString;
             var edition = configuration.GetValue("SQLEdition", "Latest");
@@ -23,6 +23,8 @@ namespace i21Apis.Data
             {
                 options.UseRowNumberForPaging(edition.ToUpper().Equals("SQL2008R2"));
             });
+
+            return optionsBuilder;
         }
     }
 }

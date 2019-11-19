@@ -8,7 +8,8 @@ namespace i21Apis.Data
     {
         private readonly IConfiguration configuration;
 
-        public CatalogDbContext(IConfiguration configuration)
+        public CatalogDbContext(IConfiguration configuration, DbContextOptions<CatalogDbContext> options)
+            : base(options)
         {
             this.configuration = configuration;
         }

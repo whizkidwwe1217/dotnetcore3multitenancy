@@ -11,9 +11,9 @@ namespace i21Apis.Controllers
     public class CompanyLocationController : ControllerBase
     {
         private readonly Tenant tenant;
-        private readonly TenantDbContext dbContext;
+        private readonly DbContext dbContext;
 
-        public CompanyLocationController(Tenant tenant, TenantDbContext dbContext)
+        public CompanyLocationController(Tenant tenant, DbContext dbContext)
         {
             this.tenant = tenant;
             this.dbContext = dbContext;

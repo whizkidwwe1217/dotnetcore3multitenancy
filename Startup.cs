@@ -30,11 +30,10 @@ namespace i21Apis
                 scanner.WithDefaultConventions();
             });
 
-
             services.AddLogging();
             services.AddMultitenancy<Tenant, DefaultTenantResolver>();
 
-            services.AddTransient<IDbContextConfigurationBuilder>(provider =>
+            services.For<IDbContextConfigurationBuilder>().Use(provider =>
             {
                 var tenant = provider.GetRequiredService<Tenant>();
 
@@ -47,8 +46,27 @@ namespace i21Apis
                 else
                     throw new System.InvalidOperationException("Invalid database provider.");
             });
+            
+            services.For<DbContext>().Use(provider =>
+            {
+                var tenant = provider.GetRequiredService<Tenant>();
 
-            services.AddScoped<DbContext, TenantDbContext>();
+                if (tenant.DatabaseProvider.Equals("SqlServer"))
+                {
+                    return provider.GetService<TenantSqlServerDbContext>();
+                }
+                else if (tenant.DatabaseProvider.Equals("MySql"))
+                {
+                    return provider.GetService<TenantMySqlDbContext>();
+                }
+                else if (tenant.DatabaseProvider.Equals("Sqlite"))
+                {
+                    return provider.GetService<TenantSqliteDbContext>();
+                }
+                else
+                    throw new System.InvalidOperationException("Invalid database provider.");
+            });
+
             services.AddHealthChecks()
                 .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
         }

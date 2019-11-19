@@ -5,20 +5,21 @@ using Microsoft.Extensions.Configuration;
 
 namespace i21Apis.Data
 {
-    public class TenantDbContext : DbContext
+    public abstract class TenantDbContext<TDbContext> : DbContext
+        where TDbContext : DbContext
     {
-        private readonly IConfiguration configuration;
-        private readonly Tenant tenant;
-        private readonly IDbContextConfigurationBuilder builder;
+        protected readonly IConfiguration configuration;
+        protected readonly Tenant tenant;
+        protected readonly IDbContextConfigurationBuilder builder;
 
-        public TenantDbContext(DbContextOptions<TenantDbContext> options)
+        public TenantDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
 
         }
 
         public TenantDbContext(IConfiguration configuration, Tenant tenant,
-            IDbContextConfigurationBuilder builder, DbContextOptions<TenantDbContext> options)
+            IDbContextConfigurationBuilder builder, DbContextOptions<TDbContext> options)
             : this(options)
         {
             this.configuration = configuration;
@@ -29,7 +30,7 @@ namespace i21Apis.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            if (builder != null) builder.OnConfiguring(optionsBuilder);
+            if (builder != null) builder.Build(optionsBuilder);
         }
 
         public DbSet<tblARCustomer> tblARCustomer { get; set; }
