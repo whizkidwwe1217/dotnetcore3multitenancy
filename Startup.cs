@@ -30,8 +30,8 @@ namespace i21Apis
             });
 
             services.AddLogging();
-            services.AddMultitenancy<Tenant, CachedDomainTenantResolver>();
-            services.AddMultiDbContext<Tenant>();
+            services.AddMultitenancy<Tenant, DomainTenantResolver>();
+            services.AddMultiDbContext<Tenant>(false);
 
             services.AddHealthChecks()
                 .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);

@@ -1,3 +1,4 @@
+using System;
 using i21Apis.Models;
 using i21Apis.Repositories;
 using Lamar;
@@ -6,9 +7,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace i21Apis.Data
 {
+    public struct MultiTenantDbContextOptions
+    {
+        public bool ThrowWhenTenantIsNotFound { get; set; }
+    }
+
     public static class DatabaseExtensions
     {
-        public static ServiceRegistry AddMultiDbContext<TTenant>(this ServiceRegistry services) where TTenant : ITenant
+        public static ServiceRegistry AddMultiDbContext<TTenant>(this ServiceRegistry services, bool throwWhenTenantIsNotFound = true) where TTenant : ITenant
         {
             services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
             services.For<IDbContextConfigurationBuilder>().Use(provider =>
@@ -23,13 +29,16 @@ namespace i21Apis.Data
                 else if (tenant.DatabaseProvider.Equals("Sqlite"))
                     return provider.GetService<SqliteDbContextConfigurationBuilder>();
                 else
-                    throw new System.InvalidOperationException("Invalid database provider.");
+                    return ThrowOrReturnNull<IDbContextConfigurationBuilder, TTenant>(tenant, throwWhenTenantIsNotFound, "Invalid database provider.");
             });
 
             services.For<DbContext>().Use(provider =>
             {
-                var tenant = provider.GetRequiredService<Tenant>();
-                if (tenant == null) throw new System.NullReferenceException("Tenant not found.");
+                var tenant = provider.GetRequiredService<TTenant>();
+                if (tenant == null)
+                {
+                    return ThrowOrReturnNull<DbContext, TTenant>(tenant, throwWhenTenantIsNotFound, "Tenant not found.");
+                }
 
                 if (tenant.DatabaseProvider.Equals("SqlServer"))
                     return provider.GetService<TenantSqlServerDbContext>();
@@ -38,10 +47,16 @@ namespace i21Apis.Data
                 else if (tenant.DatabaseProvider.Equals("Sqlite"))
                     return provider.GetService<TenantSqliteDbContext>();
                 else
-                    throw new System.InvalidOperationException("Invalid database provider.");
+                    return ThrowOrReturnNull<DbContext, TTenant>(tenant, throwWhenTenantIsNotFound, "Invalid database provider.");
             });
 
             return services;
+        }
+
+        private static TReturnType ThrowOrReturnNull<TReturnType, TTenant>(TTenant tenant, bool throwWhenTenantIsNotFound, string message) where TTenant : ITenant
+        {
+            if (throwWhenTenantIsNotFound) throw new System.NullReferenceException(message);
+            else return default(TReturnType);
         }
     }
 }

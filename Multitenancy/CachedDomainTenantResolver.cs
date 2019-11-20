@@ -43,12 +43,20 @@ namespace i21Apis.Multitenancy
         {
             var hostname = context.Request.Host.Value.ToLower();
             var host = context.Request.Host;
-            var identifier = hostname.Substring(0, hostname.IndexOf("."));
+            var pos = hostname.IndexOf(".");
+            Tenant tenant = null;
 
-            // Tenant tenant = await catalog.Set<Tenant>().Where(e => e.HostName.Contains(hostname)).FirstOrDefaultAsync();
-            Tenant tenant = await catalog.Set<Tenant>()
-                .Where(e => e.Name.ToLower().Equals(identifier.ToLower()))
-                .FirstOrDefaultAsync();
+            if (pos != -1)
+            {
+                var identifier = hostname.Substring(0, pos);
+                if (!string.IsNullOrEmpty(identifier))
+                {
+                    tenant = await catalog.Set<Tenant>()
+                        .Where(e => e.HostName.ToLower().Equals(identifier.ToLower()))
+                        .FirstOrDefaultAsync();
+                }
+            }
+
             return await Task.FromResult(new TenantContext<Tenant>(tenant));
         }
     }
