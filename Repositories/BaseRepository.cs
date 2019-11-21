@@ -4,11 +4,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using i21Apis.Common;
-using i21Apis.Models;
+using HordeFlow.Common;
+using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace i21Apis.Repositories
+namespace HordeFlow.Repositories
 {
     public abstract class BaseRepository<TKey, TEntity> : IRepository<TKey, TEntity>
         where TEntity : class, IBaseEntity<TKey>, new()

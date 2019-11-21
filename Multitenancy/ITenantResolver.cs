@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public interface ITenantResolver<TTenant> where TTenant : class
     {

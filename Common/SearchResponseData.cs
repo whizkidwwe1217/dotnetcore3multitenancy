@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace i21Apis.Common
+namespace HordeFlow.Common
 {
     public class SearchResponseData : IResponseData<object>
     {

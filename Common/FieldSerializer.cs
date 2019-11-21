@@ -4,7 +4,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace i21Apis.Common
+namespace HordeFlow.Common
 {
     public class FieldSerializer : DefaultContractResolver
     {

@@ -1,7 +1,7 @@
-using i21Apis.Models;
+using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace i21Apis.Repositories
+namespace HordeFlow.Repositories
 {
     public class RepositoryManager<TKey> : IRepositoryManager<TKey>
     {

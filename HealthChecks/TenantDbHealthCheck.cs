@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace i21Apis.HealthChecks
+namespace HordeFlow.HealthChecks
 {
     public class TenantDbHealthCheck : IHealthCheck
     {

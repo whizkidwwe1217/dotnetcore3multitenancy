@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 
-namespace i21Apis.Common
+namespace HordeFlow.Common
 {
     public static class DynamicExpressionBuilder
     {

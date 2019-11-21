@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using i21Apis.Data;
-using i21Apis.Models;
+using HordeFlow.Data;
+using HordeFlow.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public class CachedDomainTenantResolver : MemoryCacheTenantResolver<Tenant>
     {

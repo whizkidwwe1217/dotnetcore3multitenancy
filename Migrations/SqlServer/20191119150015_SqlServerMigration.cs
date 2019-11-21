@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace i21Apis.Migrations.SqlServer
+namespace HordeFlow.Migrations.SqlServer
 {
     public partial class SqlServerMigration : Migration
     {

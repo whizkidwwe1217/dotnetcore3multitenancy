@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace i21Apis.Models
+namespace HordeFlow.Models
 {
     public class tblARCustomer : IBaseEntity<int>
     {

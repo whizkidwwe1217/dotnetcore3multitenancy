@@ -1,13 +1,13 @@
 using System.Linq;
 using System.Threading.Tasks;
-using i21Apis.Data;
-using i21Apis.Models;
-using i21Apis.Multitenancy;
-using i21Apis.Repositories;
+using HordeFlow.Data;
+using HordeFlow.Models;
+using HordeFlow.Multitenancy;
+using HordeFlow.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace i21Apis.Controllers
+namespace HordeFlow.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]

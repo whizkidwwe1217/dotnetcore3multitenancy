@@ -1,4 +1,4 @@
-namespace i21Apis.Data
+namespace HordeFlow.Data
 {
     public interface ITenant
     {

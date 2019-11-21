@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using i21Apis.Data;
+using HordeFlow.Data;
 
-namespace i21Apis.Migrations.SqlServer
+namespace HordeFlow.Migrations.SqlServer
 {
     [DbContext(typeof(TenantSqlServerDbContext))]
     [Migration("20191119150015_SqlServerMigration")]
@@ -21,7 +21,7 @@ namespace i21Apis.Migrations.SqlServer
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("i21Apis.Models.tblARCustomer", b =>
+            modelBuilder.Entity("HordeFlow.Models.tblARCustomer", b =>
                 {
                     b.Property<int>("intEntityId")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace i21Apis.Migrations.SqlServer
                     b.ToTable("tblARCustomer");
                 });
 
-            modelBuilder.Entity("i21Apis.Models.tblSMCompanyLocation", b =>
+            modelBuilder.Entity("HordeFlow.Models.tblSMCompanyLocation", b =>
                 {
                     b.Property<int>("intCompanyLocationId")
                         .ValueGeneratedOnAdd()

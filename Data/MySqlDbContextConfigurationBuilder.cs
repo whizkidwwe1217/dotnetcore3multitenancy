@@ -1,10 +1,10 @@
 using System;
-using i21Apis.Models;
+using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
-namespace i21Apis.Data
+namespace HordeFlow.Data
 {
     public class MySqlDbContextConfigurationBuilder : IDbContextConfigurationBuilder
     {

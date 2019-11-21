@@ -1,9 +1,12 @@
 @url = https://localhost
 @dns = hris.hordeflow.com
 ###
-GET {{url}}:8001/api/v1/catalog
+GET {{url}}:8000/api/v1/admin/catalog
 ###
-GET {{url}}:8002/api/v1/catalog/xml
+GET {{url}}:8000/api/v1/admin/catalog/xml
+###
+GET https://irely.{{dns}}/api/v1/admin/catalog
+###
 ###
 GET https://irely.{{dns}}/api/v1/customer
 ###
@@ -11,7 +14,7 @@ GET https://hordeflow.{{dns}}/api/v1/customer
 ###
 GET https://xyz.{{dns}}/api/v1/customer
 ###
-GET {{url}}:8000/api/v1/customer
+GET {{url}}:8001/api/v1/customer
 Accept: application/xml
 ###
 GET {{url}}:8002/api/v1/customer

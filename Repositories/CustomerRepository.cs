@@ -1,6 +1,6 @@
-using i21Apis.Models;
+using HordeFlow.Models;
 
-namespace i21Apis.Repositories
+namespace HordeFlow.Repositories
 {
     public interface ICustomerRepository : IRepository<int, tblARCustomer>
     {

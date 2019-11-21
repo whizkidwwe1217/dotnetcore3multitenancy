@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public abstract class MemoryCacheTenantResolver<TTenant> : ITenantResolver<TTenant> where TTenant : class
     {

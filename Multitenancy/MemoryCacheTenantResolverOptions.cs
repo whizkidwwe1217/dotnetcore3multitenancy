@@ -1,4 +1,4 @@
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public class MemoryCacheTenantResolverOptions
     {

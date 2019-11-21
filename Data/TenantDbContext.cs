@@ -1,9 +1,9 @@
-using i21Apis.Data;
-using i21Apis.Models;
+using HordeFlow.Data;
+using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace i21Apis.Data
+namespace HordeFlow.Data
 {
     public abstract class TenantDbContext<TDbContext> : DbContext
         where TDbContext : DbContext

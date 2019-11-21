@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace i21Apis.Common
+namespace HordeFlow.Common
 {
     public static class SearchExtensions
     {

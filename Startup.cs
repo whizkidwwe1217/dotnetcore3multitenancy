@@ -1,7 +1,7 @@
-using i21Apis.Data;
-using i21Apis.HealthChecks;
-using i21Apis.Models;
-using i21Apis.Multitenancy;
+using HordeFlow.Data;
+using HordeFlow.HealthChecks;
+using HordeFlow.Models;
+using HordeFlow.Multitenancy;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
-namespace i21Apis
+namespace HordeFlow
 {
     public class Startup
     {
@@ -53,7 +53,7 @@ namespace i21Apis
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMultitenancy<Tenant>();
+            app.UseMultitenancy<Tenant>(options => options.PreventInvalidCatalogAccess = true);
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

@@ -1,10 +1,10 @@
 using System.IO;
-using i21Apis.Models;
+using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace i21Apis.Data.Design
+namespace HordeFlow.Data.Design
 {
     public class CatalogDesignTimeDbContextFactory : IDesignTimeDbContextFactory<CatalogDbContext>
     {

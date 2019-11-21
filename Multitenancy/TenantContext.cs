@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public class TenantContext<TTenant> : IDisposable where TTenant : class
     {

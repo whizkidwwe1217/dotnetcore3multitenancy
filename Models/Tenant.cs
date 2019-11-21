@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using i21Apis.Data;
-using i21Apis.Multitenancy;
+using HordeFlow.Data;
+using HordeFlow.Multitenancy;
 
-namespace i21Apis.Models
+namespace HordeFlow.Models
 {
     public class Tenant : ITenant
     {

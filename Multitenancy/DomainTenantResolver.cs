@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using i21Apis.Models;
+using HordeFlow.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using i21Apis.Data;
+using HordeFlow.Data;
 
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public class DomainTenantResolver : ITenantResolver<Tenant>
     {

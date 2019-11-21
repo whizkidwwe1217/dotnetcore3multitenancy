@@ -2,14 +2,14 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using i21Apis.Models;
-using i21Apis.Repositories;
+using HordeFlow.Models;
+using HordeFlow.Repositories;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
-namespace i21Apis.Common
+namespace HordeFlow.Common
 {
     public static class RepositoryUtils
     {

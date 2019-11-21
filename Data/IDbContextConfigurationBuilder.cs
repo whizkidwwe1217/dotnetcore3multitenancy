@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace i21Apis.Data
+namespace HordeFlow.Data
 {
     public interface IDbContextConfigurationBuilder
     {

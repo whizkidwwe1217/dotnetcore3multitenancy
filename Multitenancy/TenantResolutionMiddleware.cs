@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public class TenantResolutionMiddleware<TTenant> where TTenant : class
     {

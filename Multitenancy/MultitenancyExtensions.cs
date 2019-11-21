@@ -1,15 +1,17 @@
-using i21Apis.Repositories;
+using System;
+using HordeFlow.Data;
+using HordeFlow.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace i21Apis.Multitenancy
+namespace HordeFlow.Multitenancy
 {
     public static class MultitenancyExtensions
     {
-        public const string CURRENT_TENANT_CONTEXT_KEY = "i21Apis.Multitenancy.CurrentTenantContext";
-        public const string CURRENT_TENANT_CONTAINER_KEY = "i21Apis.Multitenancy.CurrentTenantContainer";
+        public const string CURRENT_TENANT_CONTEXT_KEY = "HordeFlow.Multitenancy.CurrentTenantContext";
+        public const string CURRENT_TENANT_CONTAINER_KEY = "HordeFlow.Multitenancy.CurrentTenantContainer";
 
         public static void SetCurrentTenantContext<TTenant>(this HttpContext context, TenantContext<TTenant> tenantContext) where TTenant : class
         {
@@ -43,20 +45,32 @@ namespace i21Apis.Multitenancy
             services.AddScoped(prov => prov.GetService<IHttpContextAccessor>()?.HttpContext?.GetTenantContext<TTenant>());
             services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
             services.AddTransient(typeof(IRepositoryManager<>), typeof(RepositoryManager<>));
-            
+
             // Ensure caching is available for caching resolvers
             var resolverType = typeof(TResolver);
             if (typeof(MemoryCacheTenantResolver<TTenant>).IsAssignableFrom(resolverType))
             {
                 services.AddMemoryCache();
             }
-            
+
             return services;
         }
 
-        public static IApplicationBuilder UseMultitenancy<TTenant>(this IApplicationBuilder app) where TTenant : class
+        public static IApplicationBuilder UseMultitenancy<TTenant>(this IApplicationBuilder app,
+            Action<MultitenancyOptions> configure) where TTenant : class, ITenant
         {
-            return app.UseMiddleware<TenantResolutionMiddleware<TTenant>>();
+            var options = new MultitenancyOptions();
+            configure(options);
+
+            app.UseMiddleware<TenantResolutionMiddleware<TTenant>>();
+
+            if (options.PreventInvalidCatalogAccess)
+            {
+                app.UseMiddleware<InvalidCatalogAccessMiddleware<TTenant>>();
+            }
+
+
+            return app;
         }
     }
 }

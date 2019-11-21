@@ -1,11 +1,11 @@
 using System;
-using i21Apis.Data;
-using i21Apis.Models;
+using HordeFlow.Data;
+using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
-namespace i21Apis.Data
+namespace HordeFlow.Data
 {
     public class TenantMySqlDbContext : TenantDbContext<TenantMySqlDbContext>
     {

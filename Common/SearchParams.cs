@@ -1,4 +1,4 @@
-﻿namespace i21Apis.Common
+﻿namespace HordeFlow.Common
 {
     public class SearchParams
     {

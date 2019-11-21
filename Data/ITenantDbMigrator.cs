@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace i21Apis.Data
+namespace HordeFlow.Data
 {
     public interface ITenantDbMigrator
     {

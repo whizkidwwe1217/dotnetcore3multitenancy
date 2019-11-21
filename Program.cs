@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Lamar.Microsoft.DependencyInjection;
 
-namespace i21Apis
+namespace HordeFlow
 {
     public class Program
     {

@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
-using i21Apis.Data;
-using i21Apis.Models;
-using i21Apis.Multitenancy;
+using HordeFlow.Data;
+using HordeFlow.Models;
+using HordeFlow.Multitenancy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace i21Apis.Controllers
+namespace HordeFlow.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v1/admin/[controller]")]
     [FormatFilter]
     public class CatalogController : ControllerBase
     {

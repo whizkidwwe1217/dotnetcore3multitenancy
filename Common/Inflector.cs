@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace i21Apis.Common
+namespace HordeFlow.Common
 {
     public static class Inflector
     {

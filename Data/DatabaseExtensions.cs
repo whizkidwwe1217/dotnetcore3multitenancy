@@ -1,11 +1,11 @@
 using System;
-using i21Apis.Models;
-using i21Apis.Repositories;
+using HordeFlow.Models;
+using HordeFlow.Repositories;
 using Lamar;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace i21Apis.Data
+namespace HordeFlow.Data
 {
     public struct MultiTenantDbContextOptions
     {

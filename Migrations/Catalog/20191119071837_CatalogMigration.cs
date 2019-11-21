@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace i21Apis.Migrations.Catalog
+namespace HordeFlow.Migrations.Catalog
 {
     public partial class CatalogMigration : Migration
     {

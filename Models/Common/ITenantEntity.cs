@@ -1,4 +1,4 @@
-namespace  i21Apis.Models
+namespace  HordeFlow.Models
 {
     public interface ITenantEntity<TTenantKey, TKey> : IBaseEntity<TKey>
     {
