@@ -30,11 +30,14 @@ namespace HordeFlow
             });
 
             services.AddLogging();
-            services.AddMultitenancy<Tenant, DomainTenantResolver>();
-            services.AddMultiDbContext<Tenant>(false);
+            services.AddMultitenancy<Tenant, DomainTenantResolver>()
+            .AddMultiDbContext<Tenant>(options =>
+            {
+                options.ThrowWhenTenantIsNotFound = false;
+            });
 
             services.AddHealthChecks()
-                .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
+            .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -53,7 +56,10 @@ namespace HordeFlow
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMultitenancy<Tenant>(options => options.PreventInvalidCatalogAccess = true);
+            app.UseMultitenancy<Tenant>(options =>
+            {
+                options.PreventInvalidCatalogAccess = true;
+            });
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

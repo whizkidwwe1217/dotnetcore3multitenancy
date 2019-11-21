@@ -1,6 +1,6 @@
 namespace HordeFlow.Multitenancy
 {
-    public interface ITenantValue<out TTenant>
+    public interface ITenantInfo<out TTenant>
     {
         TTenant Value { get; }
     }

@@ -1,6 +1,7 @@
 using System;
 using HordeFlow.Data;
 using HordeFlow.Repositories;
+using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +37,7 @@ namespace HordeFlow.Multitenancy
             return null;
         }
 
-        public static IServiceCollection AddMultitenancy<TTenant, TResolver>(this IServiceCollection services)
+        public static ServiceRegistry AddMultitenancy<TTenant, TResolver>(this ServiceRegistry services)
             where TResolver : class, ITenantResolver<TTenant>
             where TTenant : class
         {
