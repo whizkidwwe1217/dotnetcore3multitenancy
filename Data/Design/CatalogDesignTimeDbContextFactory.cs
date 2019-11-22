@@ -1,17 +1,17 @@
 using System.IO;
-using HordeFlow.Models;
+using HordeFlow.Data.Catalog;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 namespace HordeFlow.Data.Design
 {
-    public class CatalogDesignTimeDbContextFactory : IDesignTimeDbContextFactory<CatalogDbContext>
+    public class CatalogDesignTimeDbContextFactory : IDesignTimeDbContextFactory<SqlServerCatalogDbContext>
     {
-        public CatalogDbContext CreateDbContext(string[] args)
+        public SqlServerCatalogDbContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<CatalogDbContext>();
-            return new CatalogDbContext(GetConfiguration(args), optionsBuilder.Options);
+            var optionsBuilder = new DbContextOptionsBuilder<SqlServerCatalogDbContext>();
+            return new SqlServerCatalogDbContext(GetConfiguration(args), optionsBuilder.Options);
         }
 
         protected IConfiguration GetConfiguration(string[] args)

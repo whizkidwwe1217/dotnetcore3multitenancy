@@ -1,9 +1,7 @@
 using System;
-using HordeFlow.Data;
 using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace HordeFlow.Data
 {

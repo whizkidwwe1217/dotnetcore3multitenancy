@@ -1,3 +1,5 @@
+using HordeFlow.Data;
+
 namespace HordeFlow.Data
 {
     public interface ITenant
@@ -5,6 +7,6 @@ namespace HordeFlow.Data
         string Name { get; set; }
         string HostName { get; set; }
         string ConnectionString { get; set; }
-        string DatabaseProvider { get; set; }
+        DatabaseProvider DatabaseProvider { get; set; }
     }
 }

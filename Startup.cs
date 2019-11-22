@@ -1,4 +1,5 @@
 using HordeFlow.Data;
+using HordeFlow.Data.Catalog;
 using HordeFlow.HealthChecks;
 using HordeFlow.Models;
 using HordeFlow.Multitenancy;
@@ -30,12 +31,12 @@ namespace HordeFlow
             });
 
             services.AddLogging();
-            services.AddMultitenancy<Tenant, DomainTenantResolver>()
+            services.AddMultitenancy<ITenant, DomainTenantResolver>()
             .AddMultiDbContext<Tenant>(options =>
             {
-                options.ThrowWhenTenantIsNotFound = false;
+                options.ThrowWhenTenantIsNotFound = true;
             });
-
+            services.For<ICatalogStore<ITenant>>().Use<SqlServerCatalogStore>();
             services.AddHealthChecks()
             .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
         }

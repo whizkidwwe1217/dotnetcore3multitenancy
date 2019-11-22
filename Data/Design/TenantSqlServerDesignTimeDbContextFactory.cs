@@ -9,7 +9,7 @@ namespace HordeFlow.Data.Design
         protected override TenantSqlServerDbContext CreateDbContext(IConfiguration configuration, string provider)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantSqlServerDbContext>();
-            var tenant = new Tenant { DatabaseProvider = "SqlServer", ConnectionString = ConnectionStringTemplates.SQLSERVER };
+            var tenant = new Tenant { DatabaseProvider = DatabaseProvider.SqlServer, ConnectionString = ConnectionStringTemplates.SQLSERVER };
             var builder = new SqlServerDbContextConfigurationBuilder(configuration, tenant);
             return new TenantSqlServerDbContext(configuration, tenant, builder, optionsBuilder.Options);
         }

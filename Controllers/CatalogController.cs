@@ -12,9 +12,9 @@ namespace HordeFlow.Controllers
     [FormatFilter]
     public class CatalogController : ControllerBase
     {
-        private readonly CatalogDbContext catalog;
+        private readonly ICatalogStore<ITenant> catalog;
 
-        public CatalogController(CatalogDbContext catalog)
+        public CatalogController(ICatalogStore<ITenant> catalog)
         {
             this.catalog = catalog;
         }
@@ -22,7 +22,7 @@ namespace HordeFlow.Controllers
         [HttpGet("{format?}")]
         public async Task<IActionResult> Get()
         {
-            var data = await catalog.Tenant.ToListAsync();
+            var data = await catalog.GetTenantsAsync();
             return Ok(data);
         }
     }

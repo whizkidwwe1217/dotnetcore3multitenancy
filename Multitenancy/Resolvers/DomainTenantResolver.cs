@@ -1,23 +1,20 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using HordeFlow.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using HordeFlow.Data;
 
 namespace HordeFlow.Multitenancy
 {
-    public class DomainTenantResolver : ITenantResolver<Tenant>
+    public class DomainTenantResolver : ITenantResolver<ITenant>
     {
-        private readonly CatalogDbContext catalog;
+        private readonly ICatalogStore<ITenant> store;
 
-        public DomainTenantResolver(CatalogDbContext catalog)
+        public DomainTenantResolver(ICatalogStore<ITenant> catalog)
         {
-            this.catalog = catalog;
+            this.store = catalog;
         }
 
-        public async Task<TenantContext<Tenant>> ResolveAsync(HttpContext context)
+        public async Task<TenantContext<ITenant>> ResolveAsync(HttpContext context)
         {
             var hostname = context.Request.Host.Value.ToLower();
             var host = context.Request.Host;
@@ -34,9 +31,10 @@ namespace HordeFlow.Multitenancy
             //             .FirstOrDefaultAsync();
             //     }
             // }
-            Tenant tenant = await catalog.Set<Tenant>().Where(e => e.HostName.Contains(hostname)).FirstOrDefaultAsync();
+            var tenants = await store.GetTenantsAsync(e => e.HostName.ToLower().Equals(hostname.ToLower()));
+            var tenant = tenants.First();
 
-            return await Task.FromResult(new TenantContext<Tenant>(tenant));
+            return await Task.FromResult(new TenantContext<ITenant>(tenant));
         }
     }
 }

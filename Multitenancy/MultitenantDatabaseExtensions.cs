@@ -1,21 +1,22 @@
 using System;
-using HordeFlow.Models;
+using HordeFlow.Data;
 using HordeFlow.Repositories;
 using Lamar;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HordeFlow.Data
+namespace HordeFlow.Multitenancy
 {
     public struct MultiTenantDbContextOptions
     {
         public bool ThrowWhenTenantIsNotFound { get; set; }
+        public MultitenancyMode MultitenancyMode { get; set; }
     }
 
-    public static class DatabaseExtensions
+    public static class MultitenantDatabaseExtensions
     {
         public static ServiceRegistry AddMultiDbContext<TTenant>(this ServiceRegistry services,
-            Action<MultiTenantDbContextOptions> configure) where TTenant : ITenant
+            Action<MultiTenantDbContextOptions> configure) where TTenant : class, ITenant
         {
             var options = new MultiTenantDbContextOptions();
             configure(options);
@@ -29,16 +30,15 @@ namespace HordeFlow.Data
                     return ThrowOrReturnNull<IDbContextConfigurationBuilder, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
                 }
 
-                if (tenant.DatabaseProvider.Equals("SqlServer"))
+                if (tenant.DatabaseProvider == DatabaseProvider.SqlServer)
                     return provider.GetService<SqlServerDbContextConfigurationBuilder>();
-                else if (tenant.DatabaseProvider.Equals("MySql"))
+                else if (tenant.DatabaseProvider == DatabaseProvider.MySql)
                     return provider.GetService<MySqlDbContextConfigurationBuilder>();
-                else if (tenant.DatabaseProvider.Equals("Sqlite"))
+                else if (tenant.DatabaseProvider == DatabaseProvider.Sqlite)
                     return provider.GetService<SqliteDbContextConfigurationBuilder>();
                 else
                     return ThrowOrReturnNull<IDbContextConfigurationBuilder, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Invalid database provider.");
             });
-
             services.For<DbContext>().Use(provider =>
             {
                 var tenant = provider.GetRequiredService<TTenant>();
@@ -47,14 +47,18 @@ namespace HordeFlow.Data
                     return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
                 }
 
-                if (tenant.DatabaseProvider.Equals("SqlServer"))
+                if (tenant.DatabaseProvider == DatabaseProvider.SqlServer)
                     return provider.GetService<TenantSqlServerDbContext>();
-                else if (tenant.DatabaseProvider.Equals("MySql"))
+                else if (tenant.DatabaseProvider == DatabaseProvider.MySql)
                     return provider.GetService<TenantMySqlDbContext>();
-                else if (tenant.DatabaseProvider.Equals("Sqlite"))
+                else if (tenant.DatabaseProvider == DatabaseProvider.Sqlite)
                     return provider.GetService<TenantSqliteDbContext>();
                 else
                     return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Invalid database provider.");
+            });
+            services.For<ICatalogStore<TTenant>>().Use(provider =>
+            {
+                return provider.GetService<ICatalogStore<TTenant>>();
             });
 
             return services;

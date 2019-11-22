@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using HordeFlow.Data;
-using HordeFlow.Multitenancy;
 
 namespace HordeFlow.Models
 {
@@ -12,6 +11,6 @@ namespace HordeFlow.Models
         public string Name { get; set; }
         public string ConnectionString { get; set; }
         public string HostName { get; set; }
-        public string DatabaseProvider { get; set; } = "SqlServer";
+        public DatabaseProvider DatabaseProvider { get; set; } = DatabaseProvider.SqlServer;
     }
 }

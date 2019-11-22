@@ -2,13 +2,13 @@ using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace HordeFlow.Data
+namespace HordeFlow.Data.Catalog
 {
-    public class CatalogDbContext : DbContext
+    public class SqlServerCatalogDbContext : DbContext
     {
         private readonly IConfiguration configuration;
 
-        public CatalogDbContext(IConfiguration configuration, DbContextOptions<CatalogDbContext> options)
+        public SqlServerCatalogDbContext(IConfiguration configuration, DbContextOptions<SqlServerCatalogDbContext> options)
             : base(options)
         {
             this.configuration = configuration;

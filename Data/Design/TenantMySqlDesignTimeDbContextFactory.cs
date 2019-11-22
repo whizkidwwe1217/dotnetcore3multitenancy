@@ -9,7 +9,7 @@ namespace HordeFlow.Data.Design
         protected override TenantMySqlDbContext CreateDbContext(IConfiguration configuration, string provider)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantMySqlDbContext>();
-            var tenant = new Tenant { DatabaseProvider = "MySql", ConnectionString = ConnectionStringTemplates.MYSQL };
+            var tenant = new Tenant { DatabaseProvider = DatabaseProvider.MySql, ConnectionString = ConnectionStringTemplates.MYSQL };
             var builder = new MySqlDbContextConfigurationBuilder(configuration, tenant);
             return new TenantMySqlDbContext(configuration, tenant, builder, optionsBuilder.Options);
         }
