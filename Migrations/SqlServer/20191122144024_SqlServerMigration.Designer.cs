@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HordeFlow.Migrations.SqlServer
 {
     [DbContext(typeof(TenantSqlServerDbContext))]
-    [Migration("20191122133011_SqlServerMigration")]
+    [Migration("20191122144024_SqlServerMigration")]
     partial class SqlServerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

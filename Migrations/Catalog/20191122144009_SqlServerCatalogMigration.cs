@@ -17,7 +17,8 @@ namespace HordeFlow.Migrations.Catalog
                     HostName = table.Column<string>(nullable: true),
                     DatabaseProvider = table.Column<int>(nullable: false),
                     ConcurrencyStamp = table.Column<byte[]>(nullable: true),
-                    ConcurrencyTimeStamp = table.Column<DateTime>(nullable: true)
+                    ConcurrencyTimeStamp = table.Column<DateTime>(nullable: true),
+                    IsDedicated = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

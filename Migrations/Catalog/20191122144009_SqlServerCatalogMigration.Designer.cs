@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HordeFlow.Migrations.Catalog
 {
     [DbContext(typeof(SqlServerCatalogDbContext))]
-    [Migration("20191122132959_SqlServerCatalogMigration")]
+    [Migration("20191122144009_SqlServerCatalogMigration")]
     partial class SqlServerCatalogMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace HordeFlow.Migrations.Catalog
 
                     b.Property<string>("HostName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDedicated")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

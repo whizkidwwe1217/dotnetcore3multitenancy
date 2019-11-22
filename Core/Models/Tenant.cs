@@ -16,5 +16,6 @@ namespace HordeFlow.Models
         public DatabaseProvider DatabaseProvider { get; set; } = DatabaseProvider.SqlServer;
         public byte[] ConcurrencyStamp { get; set; }
         public DateTime? ConcurrencyTimeStamp { get; set; }
+        public bool IsDedicated { get; set; }
     }
 }

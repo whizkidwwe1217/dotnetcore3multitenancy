@@ -40,6 +40,9 @@ namespace HordeFlow.Migrations.Catalog
                     b.Property<string>("HostName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDedicated")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 

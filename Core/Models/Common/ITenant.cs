@@ -8,5 +8,6 @@ namespace HordeFlow.Data
         string HostName { get; set; }
         string ConnectionString { get; set; }
         DatabaseProvider DatabaseProvider { get; set; }
+        bool IsDedicated { get; set; }
     }
 }

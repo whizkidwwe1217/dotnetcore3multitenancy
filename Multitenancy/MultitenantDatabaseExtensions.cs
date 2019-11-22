@@ -55,10 +55,16 @@ namespace HordeFlow.Multitenancy
                 }
                 else
                 {
+                    // Is catalog
                     if (tenant == null)
-                    {
-                        return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
-                    }
+                        return provider.GetService<SqlServerCatalogDbContext>();
+
+                    if (options.MultitenancyMode == MultitenancyMode.Multi)
+                        return provider.GetService<SqlServerCatalogDbContext>();
+
+                    // Hybrid
+                    if (tenant.IsDedicated)
+                        return provider.GetService<SqlServerCatalogDbContext>();
 
                     return ResolveTenantDbContext<TTenant>(provider, tenant, options);
                 }

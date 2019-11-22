@@ -36,5 +36,13 @@ namespace HordeFlow.Controllers
             await migrator.MigrateAsync(cancellationToken);
             return Ok(true);
         }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Drop(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await migrator.DropAsync(cancellationToken);
+            return Ok(true);
+        }
     }
 }
