@@ -1,8 +1,10 @@
 using System;
 using HordeFlow.Data;
+using HordeFlow.Data.Catalog;
 using HordeFlow.Repositories;
 using Lamar;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HordeFlow.Multitenancy
@@ -20,11 +22,12 @@ namespace HordeFlow.Multitenancy
         {
             var options = new MultiTenantDbContextOptions();
             configure(options);
-
+            services.For(typeof(ICatalogStore<TTenant>)).Use(typeof(SqlServerCatalogStore));
             services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
+
             services.For<IDbContextConfigurationBuilder>().Use(provider =>
             {
-                var tenant = provider.GetRequiredService<TTenant>();
+                var tenant = provider.GetService<TTenant>();
                 if (tenant == null)
                 {
                     return ThrowOrReturnNull<IDbContextConfigurationBuilder, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
@@ -39,29 +42,55 @@ namespace HordeFlow.Multitenancy
                 else
                     return ThrowOrReturnNull<IDbContextConfigurationBuilder, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Invalid database provider.");
             });
+
             services.For<DbContext>().Use(provider =>
             {
-                var tenant = provider.GetRequiredService<TTenant>();
-                if (tenant == null)
-                {
-                    return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
-                }
+                var tenant = provider.GetService<TTenant>();
 
-                if (tenant.DatabaseProvider == DatabaseProvider.SqlServer)
-                    return provider.GetService<TenantSqlServerDbContext>();
-                else if (tenant.DatabaseProvider == DatabaseProvider.MySql)
-                    return provider.GetService<TenantMySqlDbContext>();
-                else if (tenant.DatabaseProvider == DatabaseProvider.Sqlite)
-                    return provider.GetService<TenantSqliteDbContext>();
+                // Configuration heirarchy: appsettings -> configuration options
+                var config = provider.GetRequiredService<IConfiguration>();
+                if (options.MultitenancyMode == MultitenancyMode.Single)
+                {
+                    return provider.GetService<SqlServerCatalogDbContext>();
+                }
                 else
-                    return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Invalid database provider.");
+                {
+                    if (tenant == null)
+                    {
+                        return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
+                    }
+
+                    return ResolveTenantDbContext<TTenant>(provider, tenant, options);
+                }
             });
-            services.For<ICatalogStore<TTenant>>().Use(provider =>
+
+            services.For<IDbMigrator>().Use(provider =>
             {
-                return provider.GetService<ICatalogStore<TTenant>>();
+                var tenant = provider.GetService<TTenant>();
+                if (tenant == null)
+                    return provider.GetService<CatalogDbMigrator>();
+                return provider.GetService<TenantDbMigrator>();
             });
 
             return services;
+        }
+
+        private static DbContext ResolveTenantDbContext<TTenant>(IServiceContext provider, TTenant tenant,
+            MultiTenantDbContextOptions options) where TTenant : class, ITenant
+        {
+            if (tenant == null)
+            {
+                return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
+            }
+
+            if (tenant.DatabaseProvider == DatabaseProvider.SqlServer)
+                return provider.GetService<TenantSqlServerDbContext>();
+            else if (tenant.DatabaseProvider == DatabaseProvider.MySql)
+                return provider.GetService<TenantMySqlDbContext>();
+            else if (tenant.DatabaseProvider == DatabaseProvider.Sqlite)
+                return provider.GetService<TenantSqliteDbContext>();
+            else
+                return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Invalid database provider.");
         }
 
         private static TReturnType ThrowOrReturnNull<TReturnType, TTenant>(TTenant tenant, bool throwWhenTenantIsNotFound, string message) where TTenant : ITenant

@@ -11,14 +11,16 @@ namespace HordeFlow.Controllers
     [Route("api/v1/[controller]")]
     public class TenantController : ControllerBase
     {
-        private readonly ITenantDbMigrator migrator;
+        private readonly IDbMigrator migrator;
 
-        public TenantController(ITenantDbMigrator repository)
+        public TenantController(IDbMigrator repository)
         {
             this.migrator = repository;
         }
 
-        public async Task<IActionResult> Get(CancellationToken cancellationToken = default(CancellationToken))
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Migrate(CancellationToken cancellationToken = default(CancellationToken))
         {
             await migrator.MigrateAsync(cancellationToken);
             return Ok(true);

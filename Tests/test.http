@@ -1,9 +1,9 @@
 @url = https://localhost
 @dns = hris.hordeflow.com
 ###
-GET {{url}}:8003/api/v1/admin/catalog
+POST {{url}}:8003/api/v1/admin/catalog/migrate
 ###
-GET {{url}}:8001/api/v1/admin/catalog/xml
+GET {{url}}:8003/api/v1/admin/catalog/xml
 ###
 GET https://irely.{{dns}}/api/v1/customer
 ###

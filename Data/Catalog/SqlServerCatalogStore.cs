@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using HordeFlow.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +17,10 @@ namespace HordeFlow.Data.Catalog
             this.context = context;
         }
 
-        public async Task<List<ITenant>> GetTenantsAsync(Expression<Func<Tenant, bool>> predicate = null)
+        public async Task<List<Tenant>> GetTenantsAsync(Expression<Func<Tenant, bool>> predicate = null,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (predicate == null)
-                return await context.Set<Tenant>().AsNoTracking().ToListAsync();
-            return await context.Set<Tenant>().AsNoTracking().Where(predicate).ToListAsync();
+            return await context.Set<Tenant>().ToListAsync();
         }
     }
 }

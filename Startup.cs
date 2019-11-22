@@ -36,7 +36,7 @@ namespace HordeFlow
             {
                 options.ThrowWhenTenantIsNotFound = true;
             });
-            services.For<ICatalogStore<ITenant>>().Use<SqlServerCatalogStore>();
+
             services.AddHealthChecks()
             .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
         }

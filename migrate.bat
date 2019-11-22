@@ -1,5 +1,5 @@
 set DatabaseProvider=SqlServer
-dotnet ef migrations add CatalogMigration -o Migrations/Catalog -c CatalogDbContext
+dotnet ef migrations add SqlServerCatalogMigration -o Migrations/Catalog -c SqlServerCatalogDbContext
 
 set DatabaseProvider=SqlServer
 dotnet ef migrations add SqlServerMigration -o Migrations/SqlServer -c TenantSqlServerDbContext

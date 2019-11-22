@@ -45,7 +45,6 @@ namespace HordeFlow.Multitenancy
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped(prov => prov.GetService<IHttpContextAccessor>()?.HttpContext?.GetTenantContext<TTenant>());
             services.AddScoped(prov => prov.GetService<TenantContext<TTenant>>()?.Tenant);
-            services.AddTransient(typeof(IRepositoryManager<>), typeof(RepositoryManager<>));
 
             // Ensure caching is available for caching resolvers
             var resolverType = typeof(TResolver);

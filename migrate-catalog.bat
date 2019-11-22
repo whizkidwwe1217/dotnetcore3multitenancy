@@ -1,3 +1,3 @@
-dotnet ef migrations add CatalogMigration -o Migrations/Catalog -c CatalogDbContext
+dotnet ef migrations add SqlServerCatalogMigration -o Migrations/Catalog -c SqlServerCatalogDbContext
 
 pause

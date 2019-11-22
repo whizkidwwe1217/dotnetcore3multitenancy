@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace HordeFlow.Data
 {
-    public interface ITenantDbMigrator
+    public interface IDbMigrator
     {
         bool EnsureDeleted { get; set; }
         Task<bool> AllMigrationsAppliedAsync(CancellationToken cancellationToken = default(CancellationToken));
