@@ -31,11 +31,8 @@ namespace HordeFlow
             });
 
             services.AddLogging();
-            services.AddMultitenancy<ITenant, DomainTenantResolver>()
-            .AddMultiDbContext<Tenant>(options =>
-            {
-                options.ThrowWhenTenantIsNotFound = true;
-            });
+            services.AddMultitenancy<Tenant, DomainTenantResolver<Tenant>>()
+            .AddMultiDbContext<Tenant>();
 
             services.AddHealthChecks()
             .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
@@ -46,6 +43,7 @@ namespace HordeFlow
         {
             services
             .AddControllers()
+            .AddNewtonsoftJson()
             .AddXmlSerializerFormatters();
         }
 

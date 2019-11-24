@@ -1,8 +1,10 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using HordeFlow.Data;
 using HordeFlow.Models;
 using HordeFlow.Multitenancy;
+using HordeFlow.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,19 +15,20 @@ namespace HordeFlow.Controllers
     [FormatFilter]
     public class CatalogController : ControllerBase
     {
-        private readonly ICatalogStore<Tenant> catalog;
+        private readonly IRepository<Guid, Tenant> repository;
         private readonly IDbMigrator migrator;
 
-        public CatalogController(ICatalogStore<Tenant> catalog, IDbMigrator migrator)
+        public CatalogController(IRepository<Guid, Tenant> repository, IDbMigrator migrator)
         {
-            this.catalog = catalog;
+            this.repository = repository;
             this.migrator = migrator;
         }
 
         [HttpGet("{format?}")]
         public async Task<IActionResult> Get(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var data = await catalog.GetTenantsAsync(predicate: null, cancellationToken);
+            //var data = await catalog.GetTenantsAsync(predicate: null, cancellationToken);
+            var data = await repository.ListAsync(cancellationToken);
             return Ok(data);
         }
 
@@ -43,6 +46,14 @@ namespace HordeFlow.Controllers
         {
             await migrator.DropAsync(cancellationToken);
             return Ok(true);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Tenant tenant, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await repository.AddAsync(tenant, cancellationToken);
+            await repository.SaveAsync(cancellationToken);
+            return Ok(tenant);
         }
     }
 }

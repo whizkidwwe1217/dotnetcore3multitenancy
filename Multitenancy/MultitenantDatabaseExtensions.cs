@@ -17,41 +17,59 @@ namespace HordeFlow.Multitenancy
 
     public static class MultitenantDatabaseExtensions
     {
-        public static ServiceRegistry AddMultiDbContext<TTenant>(this ServiceRegistry services,
-            Action<MultiTenantDbContextOptions> configure) where TTenant : class, ITenant
+        public static ServiceRegistry AddMultiDbContext<TTenant>(this ServiceRegistry services) where TTenant : class, ITenant
         {
-            var options = new MultiTenantDbContextOptions();
-            configure(options);
             services.For(typeof(ICatalogStore<TTenant>)).Use(typeof(SqlServerCatalogStore));
             services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
 
             services.For<IDbContextConfigurationBuilder>().Use(provider =>
             {
                 var tenant = provider.GetService<TTenant>();
-                if (tenant == null)
+                var tenantContext = provider.GetService<TenantContext<TTenant>>();
+                var config = provider.GetRequiredService<IConfiguration>();
+                var mode = config.GetValue<MultitenancyMode>("MultitenancyMode", MultitenancyMode.Single);
+                var options = new MultiTenantDbContextOptions
                 {
-                    return ThrowOrReturnNull<IDbContextConfigurationBuilder, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
-                }
+                    MultitenancyMode = mode
+                };
 
-                if (tenant.DatabaseProvider == DatabaseProvider.SqlServer)
-                    return provider.GetService<SqlServerDbContextConfigurationBuilder>();
-                else if (tenant.DatabaseProvider == DatabaseProvider.MySql)
+                DatabaseProvider databaseProvider = DatabaseProvider.SqlServer;
+
+                if (tenant != null && !(options.MultitenancyMode == MultitenancyMode.Single &&
+                            tenantContext.Properties.ContainsKey("SINGLE_TENANT_MIGRATION")))
+                    databaseProvider = tenant.DatabaseProvider;
+
+                if (databaseProvider == DatabaseProvider.MySql)
                     return provider.GetService<MySqlDbContextConfigurationBuilder>();
-                else if (tenant.DatabaseProvider == DatabaseProvider.Sqlite)
+                else if (databaseProvider == DatabaseProvider.Sqlite)
                     return provider.GetService<SqliteDbContextConfigurationBuilder>();
                 else
-                    return ThrowOrReturnNull<IDbContextConfigurationBuilder, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Invalid database provider.");
+                    return provider.GetService<SqlServerDbContextConfigurationBuilder>();
             });
 
             services.For<DbContext>().Use(provider =>
             {
                 var tenant = provider.GetService<TTenant>();
-
-                // Configuration heirarchy: appsettings -> configuration options
+                var tenantContext = provider.GetService<TenantContext<TTenant>>();
                 var config = provider.GetRequiredService<IConfiguration>();
+                var mode = config.GetValue<MultitenancyMode>("MultitenancyMode", MultitenancyMode.Single);
+                var options = new MultiTenantDbContextOptions
+                {
+                    MultitenancyMode = mode
+                };
+
                 if (options.MultitenancyMode == MultitenancyMode.Single)
                 {
-                    return provider.GetService<SqlServerCatalogDbContext>();
+                    if (tenantContext.Properties.ContainsKey("SINGLE_TENANT_MIGRATION"))
+                    {
+                        return ResolveTenantDbContext<TTenant>(provider, DatabaseProvider.SqlServer, options);
+                    }
+
+                    // Is catalog
+                    if (tenant == null)
+                        return provider.GetService<SqlServerCatalogDbContext>();
+
+                    return ResolveTenantDbContext<TTenant>(provider, tenant.DatabaseProvider, options);
                 }
                 else
                 {
@@ -59,14 +77,7 @@ namespace HordeFlow.Multitenancy
                     if (tenant == null)
                         return provider.GetService<SqlServerCatalogDbContext>();
 
-                    if (options.MultitenancyMode == MultitenancyMode.Multi)
-                        return provider.GetService<SqlServerCatalogDbContext>();
-
-                    // Hybrid
-                    if (tenant.IsDedicated)
-                        return provider.GetService<SqlServerCatalogDbContext>();
-
-                    return ResolveTenantDbContext<TTenant>(provider, tenant, options);
+                    return ResolveTenantDbContext<TTenant>(provider, tenant.DatabaseProvider, options);
                 }
             });
 
@@ -81,22 +92,16 @@ namespace HordeFlow.Multitenancy
             return services;
         }
 
-        private static DbContext ResolveTenantDbContext<TTenant>(IServiceContext provider, TTenant tenant,
+        private static DbContext ResolveTenantDbContext<TTenant>(IServiceContext provider,
+            DatabaseProvider databaseProvider,
             MultiTenantDbContextOptions options) where TTenant : class, ITenant
         {
-            if (tenant == null)
-            {
-                return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Tenant not found.");
-            }
-
-            if (tenant.DatabaseProvider == DatabaseProvider.SqlServer)
-                return provider.GetService<TenantSqlServerDbContext>();
-            else if (tenant.DatabaseProvider == DatabaseProvider.MySql)
+            if (databaseProvider == DatabaseProvider.MySql)
                 return provider.GetService<TenantMySqlDbContext>();
-            else if (tenant.DatabaseProvider == DatabaseProvider.Sqlite)
+            else if (databaseProvider == DatabaseProvider.Sqlite)
                 return provider.GetService<TenantSqliteDbContext>();
             else
-                return ThrowOrReturnNull<DbContext, TTenant>(tenant, options.ThrowWhenTenantIsNotFound, "Invalid database provider.");
+                return provider.GetService<TenantSqlServerDbContext>();
         }
 
         private static TReturnType ThrowOrReturnNull<TReturnType, TTenant>(TTenant tenant, bool throwWhenTenantIsNotFound, string message) where TTenant : ITenant

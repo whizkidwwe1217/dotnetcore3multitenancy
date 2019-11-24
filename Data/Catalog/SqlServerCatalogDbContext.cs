@@ -25,6 +25,14 @@ namespace HordeFlow.Data.Catalog
             });
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Tenant>().Property(e => e.Name).HasMaxLength(50);
+            builder.Entity<Tenant>().Property(e => e.DatabaseProvider).HasConversion<string>();
+        }
+
         public DbSet<Tenant> Tenant { get; set; }
     }
 }

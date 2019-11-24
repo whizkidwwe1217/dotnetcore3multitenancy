@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace HordeFlow.Migrations.MySql
+namespace HordeFlow.Migrations.SqlServer
 {
-    public partial class MySqlMigration : Migration
+    public partial class SqlServerMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +12,7 @@ namespace HordeFlow.Migrations.MySql
                 columns: table => new
                 {
                     intEntityId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     strCustomerNumber = table.Column<string>(nullable: true),
                     strType = table.Column<string>(nullable: true),
                     dblCreditLimit = table.Column<decimal>(nullable: true),
@@ -22,8 +21,7 @@ namespace HordeFlow.Migrations.MySql
                     strTaxNumber = table.Column<string>(nullable: true),
                     strCurrency = table.Column<string>(nullable: true),
                     Id = table.Column<int>(nullable: false),
-                    ConcurrencyStamp = table.Column<DateTime>(rowVersion: true, nullable: true)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn),
+                    ConcurrencyStamp = table.Column<byte[]>(rowVersion: true, nullable: true),
                     ConcurrencyTimeStamp = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -36,7 +34,7 @@ namespace HordeFlow.Migrations.MySql
                 columns: table => new
                 {
                     intCompanyLocationId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     strLocationName = table.Column<string>(nullable: true),
                     strLocationNumber = table.Column<string>(nullable: true),
                     strLocationType = table.Column<string>(nullable: true),
@@ -54,6 +52,24 @@ namespace HordeFlow.Migrations.MySql
                 {
                     table.PrimaryKey("PK_tblSMCompanyLocation", x => x.intCompanyLocationId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Tenant",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
+                    ConnectionString = table.Column<string>(nullable: true),
+                    HostName = table.Column<string>(nullable: true),
+                    DatabaseProvider = table.Column<string>(nullable: false),
+                    ConcurrencyStamp = table.Column<byte[]>(nullable: true),
+                    ConcurrencyTimeStamp = table.Column<DateTime>(nullable: true),
+                    IsDedicated = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenant", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -63,6 +79,9 @@ namespace HordeFlow.Migrations.MySql
 
             migrationBuilder.DropTable(
                 name: "tblSMCompanyLocation");
+
+            migrationBuilder.DropTable(
+                name: "Tenant");
         }
     }
 }

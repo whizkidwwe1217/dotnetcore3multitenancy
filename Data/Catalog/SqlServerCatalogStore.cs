@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,9 @@ namespace HordeFlow.Data.Catalog
         public async Task<List<Tenant>> GetTenantsAsync(Expression<Func<Tenant, bool>> predicate = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            return await context.Set<Tenant>().ToListAsync();
+            if (predicate != null)
+                return await context.Set<Tenant>().AsNoTracking().Where(predicate).ToListAsync();
+            return await context.Set<Tenant>().AsNoTracking().ToListAsync();
         }
     }
 }

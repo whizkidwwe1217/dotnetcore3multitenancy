@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HordeFlow.Migrations.SqlServer
 {
     [DbContext(typeof(TenantSqlServerDbContext))]
-    [Migration("20191122144024_SqlServerMigration")]
+    [Migration("20191124084307_SqlServerMigration")]
     partial class SqlServerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,40 @@ namespace HordeFlow.Migrations.SqlServer
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("HordeFlow.Models.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("ConcurrencyStamp")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<DateTime?>("ConcurrencyTimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DatabaseProvider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HostName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDedicated")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenant");
+                });
 
             modelBuilder.Entity("HordeFlow.Models.tblARCustomer", b =>
                 {

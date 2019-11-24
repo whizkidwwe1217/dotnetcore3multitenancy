@@ -17,6 +17,40 @@ namespace HordeFlow.Migrations.MySql
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("HordeFlow.Models.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<byte[]>("ConcurrencyStamp")
+                        .HasColumnType("longblob");
+
+                    b.Property<DateTime?>("ConcurrencyTimeStamp")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("DatabaseProvider")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("HostName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsDedicated")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenant");
+                });
+
             modelBuilder.Entity("HordeFlow.Models.tblARCustomer", b =>
                 {
                     b.Property<int>("intEntityId")

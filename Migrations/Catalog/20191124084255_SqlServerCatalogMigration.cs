@@ -12,10 +12,10 @@ namespace HordeFlow.Migrations.Catalog
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
                     ConnectionString = table.Column<string>(nullable: true),
                     HostName = table.Column<string>(nullable: true),
-                    DatabaseProvider = table.Column<int>(nullable: false),
+                    DatabaseProvider = table.Column<string>(nullable: false),
                     ConcurrencyStamp = table.Column<byte[]>(nullable: true),
                     ConcurrencyTimeStamp = table.Column<DateTime>(nullable: true),
                     IsDedicated = table.Column<bool>(nullable: false)

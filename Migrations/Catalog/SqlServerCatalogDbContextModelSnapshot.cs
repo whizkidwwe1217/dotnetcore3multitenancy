@@ -34,8 +34,9 @@ namespace HordeFlow.Migrations.Catalog
                     b.Property<string>("ConnectionString")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DatabaseProvider")
-                        .HasColumnType("int");
+                    b.Property<string>("DatabaseProvider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HostName")
                         .HasColumnType("nvarchar(max)");
@@ -44,7 +45,8 @@ namespace HordeFlow.Migrations.Catalog
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 

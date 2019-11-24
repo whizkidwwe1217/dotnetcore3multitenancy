@@ -16,6 +16,40 @@ namespace HordeFlow.Migrations.Sqlite
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
 
+            modelBuilder.Entity("HordeFlow.Models.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("ConcurrencyStamp")
+                        .HasColumnType("BLOB");
+
+                    b.Property<DateTime?>("ConcurrencyTimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DatabaseProvider")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HostName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDedicated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenant");
+                });
+
             modelBuilder.Entity("HordeFlow.Models.tblARCustomer", b =>
                 {
                     b.Property<int>("intEntityId")

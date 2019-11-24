@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HordeFlow.Migrations.Sqlite
 {
     [DbContext(typeof(TenantSqliteDbContext))]
-    [Migration("20191122144049_SqliteMigration")]
+    [Migration("20191124084330_SqliteMigration")]
     partial class SqliteMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,6 +17,40 @@ namespace HordeFlow.Migrations.Sqlite
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.0.0");
+
+            modelBuilder.Entity("HordeFlow.Models.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<byte[]>("ConcurrencyStamp")
+                        .HasColumnType("BLOB");
+
+                    b.Property<DateTime?>("ConcurrencyTimeStamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConnectionString")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DatabaseProvider")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("HostName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsDedicated")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tenant");
+                });
 
             modelBuilder.Entity("HordeFlow.Models.tblARCustomer", b =>
                 {

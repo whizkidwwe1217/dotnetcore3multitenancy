@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace HordeFlow.Migrations.SqlServer
+namespace HordeFlow.Migrations.Sqlite
 {
-    public partial class SqlServerMigration : Migration
+    public partial class SqliteMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace HordeFlow.Migrations.SqlServer
                 columns: table => new
                 {
                     intEntityId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     strCustomerNumber = table.Column<string>(nullable: true),
                     strType = table.Column<string>(nullable: true),
                     dblCreditLimit = table.Column<decimal>(nullable: true),
@@ -34,7 +34,7 @@ namespace HordeFlow.Migrations.SqlServer
                 columns: table => new
                 {
                     intCompanyLocationId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Sqlite:Autoincrement", true),
                     strLocationName = table.Column<string>(nullable: true),
                     strLocationNumber = table.Column<string>(nullable: true),
                     strLocationType = table.Column<string>(nullable: true),
@@ -52,6 +52,24 @@ namespace HordeFlow.Migrations.SqlServer
                 {
                     table.PrimaryKey("PK_tblSMCompanyLocation", x => x.intCompanyLocationId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Tenant",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: true),
+                    ConnectionString = table.Column<string>(nullable: true),
+                    HostName = table.Column<string>(nullable: true),
+                    DatabaseProvider = table.Column<string>(nullable: false),
+                    ConcurrencyStamp = table.Column<byte[]>(nullable: true),
+                    ConcurrencyTimeStamp = table.Column<DateTime>(nullable: true),
+                    IsDedicated = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tenant", x => x.Id);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -61,6 +79,9 @@ namespace HordeFlow.Migrations.SqlServer
 
             migrationBuilder.DropTable(
                 name: "tblSMCompanyLocation");
+
+            migrationBuilder.DropTable(
+                name: "Tenant");
         }
     }
 }

@@ -17,7 +17,10 @@ namespace HordeFlow.Data
 
         public DbContextOptionsBuilder Build(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = tenant.ConnectionString;
+            var connectionString = tenant?.ConnectionString;
+            var mode = configuration.GetValue<string>("MultitenancyMode", "Single");
+            if (mode == "Single")
+                connectionString = configuration.GetConnectionString("Catalog");
             optionsBuilder.UseSqlite(connectionString);
             return optionsBuilder;
         }

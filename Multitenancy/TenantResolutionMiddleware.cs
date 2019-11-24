@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HordeFlow.Multitenancy
@@ -23,21 +24,35 @@ namespace HordeFlow.Multitenancy
             if (!IsWhitelisted(context.Request.Path))
             {
                 TenantContext<TTenant> tenantContext = null;
-                var resolver = context.RequestServices.GetService(typeof(ITenantResolver<TTenant>)) as ITenantResolver<TTenant>;
-                if (resolver != null)
-                {
-                    logger.LogDebug("Resolving current tenant using {loggerType}.", resolver.GetType().Name);
-                    tenantContext = await resolver.ResolveAsync(context);
-                }
 
-                if (tenantContext != null)
+                if (IsMigratingCatalog(context.Request.Path.Value))
                 {
-                    logger.LogDebug("Current tenant resolved. Adding to HttpContext.");
+                    tenantContext = new TenantContext<TTenant>(null);
+                    tenantContext.Properties.Add("SINGLE_TENANT_MIGRATION", true);
                     context.SetCurrentTenantContext(tenantContext);
                 }
                 else
                 {
-                    logger.LogDebug("Unable to resolve current tenant.");
+                    var resolver = context.RequestServices.GetService(typeof(ITenantResolver<TTenant>)) as ITenantResolver<TTenant>;
+                    if (resolver != null)
+                    {
+                        logger.LogDebug("Resolving current tenant using {loggerType}.", resolver.GetType().Name);
+                        tenantContext = await resolver.ResolveAsync(context);
+                    }
+
+                    if (tenantContext != null)
+                    {
+                        logger.LogDebug("Current tenant resolved. Adding to HttpContext.");
+                        if (IsMigratingCatalog(context.Request.Path.Value))
+                        {
+                            tenantContext.Properties.Add("SINGLE_TENANT_MIGRATION", true);
+                        }
+                        context.SetCurrentTenantContext(tenantContext);
+                    }
+                    else
+                    {
+                        logger.LogDebug("Unable to resolve current tenant.");
+                    }
                 }
             }
 
@@ -48,6 +63,12 @@ namespace HordeFlow.Multitenancy
         {
             if (url.StartsWith("/health")) return true;
             return false;
+        }
+
+        private bool IsMigratingCatalog(string path)
+        {
+            var regex = new Regex(@"^\/?api/(v|version).+(/?admin/(catalog|tenant)/(migrate|drop))", RegexOptions.IgnoreCase);
+            return regex.IsMatch(path);
         }
     }
 }

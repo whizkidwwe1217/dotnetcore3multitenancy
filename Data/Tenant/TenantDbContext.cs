@@ -32,6 +32,15 @@ namespace HordeFlow.Data
             if (builder != null) builder.Build(optionsBuilder);
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Tenant>().Property(e => e.Name).HasMaxLength(50);
+            builder.Entity<Tenant>().Property(e => e.DatabaseProvider).HasConversion<string>();
+        }
+
+        public DbSet<Tenant> Tenant { get; set; }
         public DbSet<tblARCustomer> tblARCustomer { get; set; }
         public DbSet<tblSMCompanyLocation> tblSMCompanyLocation { get; set; }
     }
