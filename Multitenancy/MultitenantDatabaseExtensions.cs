@@ -49,6 +49,12 @@ namespace HordeFlow.Multitenancy
                 return ResolveConfigurationBuilder(provider, DatabaseProvider.SqlServer);
             });
 
+            /*
+                If the tenant is null, that means the catalog database is being accessed, return the catalog database context.
+                Otherwise, if the tenant is not null return the per-tenant database context. 
+                However, if the migration endpoints are being accessed and if the multi-tenancy mode is Single or Hybrid,
+                return the per-tenant database but use the catalog's database provider.
+            */
             services.For<DbContext>().Use(provider =>
             {
                 var tenant = provider.GetService<TTenant>();
