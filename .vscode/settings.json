@@ -14,5 +14,9 @@
             "name": "Sqlite"
         }
     ],
-    "sqltools.useNodeRuntime": true
+    "sqltools.useNodeRuntime": true,
+    "files.exclude": {
+        "**/bin": true,
+        "**/obj": true
+    }
 }

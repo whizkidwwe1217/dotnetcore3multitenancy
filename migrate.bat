@@ -1,13 +1,31 @@
-set DatabaseProvider=SqlServer
-dotnet ef migrations add SqlServerCatalogMigration -o Migrations/Catalog -c SqlServerCatalogDbContext
+@SETLOCAL ENABLEDELAYEDEXPANSION
+
+@REM Use WMIC to retrieve date and time
+@echo off
+FOR /F "skip=1 tokens=1-6" %%A IN ('WMIC Path Win32_LocalTime Get Day^,Hour^,Minute^,Month^,Second^,Year /Format:table') DO (
+    IF NOT "%%~F"=="" (
+        SET /A SortDate = 10000 * %%F + 100 * %%D + %%A
+        set YEAR=!SortDate:~0,4!
+        set MON=!SortDate:~4,2!
+        set DAY=!SortDate:~6,2!
+        @REM Add 1000000 so as to force a prepended 0 if hours less than 10
+        SET /A SortTime = 1000000 + 10000 * %%B + 100 * %%C + %%E
+        set HOUR=!SortTime:~1,2!
+        set MIN=!SortTime:~3,2!
+        set SEC=!SortTime:~5,2!
+    )
+)
 
 set DatabaseProvider=SqlServer
-dotnet ef migrations add SqlServerMigration -o Migrations/SqlServer -c TenantSqlServerDbContext
+dotnet ef migrations add Database_Migration_SqlServer_Catalog_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/Catalog -c SqlServerCatalogDbContext
+
+set DatabaseProvider=SqlServer
+dotnet ef migrations add Database_Migration_SqlServer_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/SqlServer -c TenantSqlServerDbContext
 
 set DatabaseProvider=MySql
-dotnet ef migrations add MySqlMigration -o Migrations/MySql -c TenantMySqlDbContext
+dotnet ef migrations add Database_Migration_MySql_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/MySql -c TenantMySqlDbContext
 
 set DatabaseProvider=Sqlite
-dotnet ef migrations add SqliteMigration -o Migrations/Sqlite -c TenantSqliteDbContext
+dotnet ef migrations add Database_Migration_Sqlite_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/Sqlite -c TenantSqliteDbContext
 
 pause
