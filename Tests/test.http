@@ -1,5 +1,8 @@
 @url = https://localhost
 @dns = hris.hordeflow.com
+
+###
+POST {{url}}:8003/api/v1/admin/catalog/migrate
 ###
 POST {{url}}:8003/api/v1/admin/catalog
 Content-Type: application/json
@@ -8,17 +11,36 @@ Content-Type: application/json
     "name": "Tenant 1",
     "hostName": "localhost:8001",
     "connectionString": "Data Source=.\\Sql2017;Initial Catalog=tenant1; User=sa;Password=masterkey",
-    "databaseProvider": "SqlServer"
+    "databaseProvider": "SqlServer",
+    "isDedicated": true
 }
-
 ###
-POST {{url}}:8003/api/v1/admin/catalog/migrate
+POST {{url}}:8003/api/v1/admin/catalog
+Content-Type: application/json
 
+{
+    "name": "Tenant 2",
+    "hostName": "localhost:8002",
+    "connectionString": "Data Source=.\\Sql2017;Initial Catalog=tenant2; User=sa;Password=masterkey",
+    "databaseProvider": "SqlServer",
+    "isDedicated": false
+}
+###
+GET {{url}}:8003/api/v1/admin/catalog/json
+###
+POST {{url}}:8001/api/v1/tenant/migrate
+###
+POST {{url}}:8002/api/v1/tenant/migrate
+###
+GET {{url}}:8001/api/v1/customer
+Accept: application/xml
+###
+GET {{url}}:8002/api/v1/customer
+Accept: application/json
+###
+POST {{url}}:8001/api/v1/tenant/drop
 ###
 POST {{url}}:8003/api/v1/admin/catalog/drop
-
-###
-GET {{url}}:8003/api/v1/admin/catalog/xml
 ###
 GET https://irely.{{dns}}/api/v1/customer
 ###
@@ -28,11 +50,6 @@ GET https://irely.{{dns}}/api/v1/customer
 GET https://hordeflow.{{dns}}/api/v1/customer
 ###
 GET https://xyz.{{dns}}/api/v1/customer
-###
-GET {{url}}:8001/api/v1/customer
-Accept: application/xml
-###
-POST {{url}}:8001/api/v1/tenant/migrate
 ###
 GET {{url}}:8000/health
 ###

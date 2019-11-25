@@ -21,8 +21,13 @@ namespace HordeFlow.Data
         {
             var connectionString = tenant?.ConnectionString;
             var mode = configuration.GetValue<string>("MultitenancyMode", "Single");
-            if (mode == "Single")
+            if (mode == "Single" || mode == "Hybrid")
+            {
                 connectionString = configuration.GetConnectionString("Catalog");
+                if (mode == "Hybrid" && tenant != null && tenant.IsDedicated)
+                    connectionString = tenant.ConnectionString;
+            }
+            
             optionsBuilder.UseMySql(connectionString,
                 mySqlOptions =>
                 {

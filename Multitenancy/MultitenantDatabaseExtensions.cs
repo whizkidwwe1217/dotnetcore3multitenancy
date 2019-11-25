@@ -33,18 +33,20 @@ namespace HordeFlow.Multitenancy
                     MultitenancyMode = mode
                 };
 
-                DatabaseProvider databaseProvider = DatabaseProvider.SqlServer;
+                if (tenant != null)
+                {
+                    if ((options.MultitenancyMode == MultitenancyMode.Single || options.MultitenancyMode == MultitenancyMode.Hybrid) 
+                        && tenantContext.Properties.ContainsKey("SINGLE_TENTANT_MIGRATION"))
+                    {
+                        return ResolveConfigurationBuilder(provider, DatabaseProvider.SqlServer);
+                    }
+                    else
+                    {
+                        return ResolveConfigurationBuilder(provider, tenant.DatabaseProvider);
+                    }
+                }
 
-                if (tenant != null && !(options.MultitenancyMode == MultitenancyMode.Single &&
-                            tenantContext.Properties.ContainsKey("SINGLE_TENANT_MIGRATION")))
-                    databaseProvider = tenant.DatabaseProvider;
-
-                if (databaseProvider == DatabaseProvider.MySql)
-                    return provider.GetService<MySqlDbContextConfigurationBuilder>();
-                else if (databaseProvider == DatabaseProvider.Sqlite)
-                    return provider.GetService<SqliteDbContextConfigurationBuilder>();
-                else
-                    return provider.GetService<SqlServerDbContextConfigurationBuilder>();
+                return ResolveConfigurationBuilder(provider, DatabaseProvider.SqlServer);
             });
 
             services.For<DbContext>().Use(provider =>
@@ -58,27 +60,20 @@ namespace HordeFlow.Multitenancy
                     MultitenancyMode = mode
                 };
 
-                if (options.MultitenancyMode == MultitenancyMode.Single)
+                if (options.MultitenancyMode == MultitenancyMode.Single || options.MultitenancyMode == MultitenancyMode.Hybrid)
                 {
                     if (tenantContext.Properties.ContainsKey("SINGLE_TENANT_MIGRATION"))
                     {
                         return ResolveTenantDbContext<TTenant>(provider, DatabaseProvider.SqlServer, options);
                     }
-
-                    // Is catalog
-                    if (tenant == null)
-                        return provider.GetService<SqlServerCatalogDbContext>();
-
-                    return ResolveTenantDbContext<TTenant>(provider, tenant.DatabaseProvider, options);
                 }
-                else
-                {
-                    // Is catalog
-                    if (tenant == null)
-                        return provider.GetService<SqlServerCatalogDbContext>();
 
-                    return ResolveTenantDbContext<TTenant>(provider, tenant.DatabaseProvider, options);
-                }
+                // Is catalog
+                if (tenant == null)
+                    return provider.GetService<SqlServerCatalogDbContext>();
+
+                return ResolveTenantDbContext<TTenant>(provider, tenant.DatabaseProvider, options);
+
             });
 
             services.For<IDbMigrator>().Use(provider =>
@@ -92,9 +87,22 @@ namespace HordeFlow.Multitenancy
             return services;
         }
 
+        private static IDbContextConfigurationBuilder ResolveConfigurationBuilder(
+            IServiceContext provider,
+            DatabaseProvider databaseProvider)
+        {
+            if (databaseProvider == DatabaseProvider.MySql)
+                return provider.GetService<MySqlDbContextConfigurationBuilder>();
+            else if (databaseProvider == DatabaseProvider.Sqlite)
+                return provider.GetService<SqliteDbContextConfigurationBuilder>();
+            else
+                return provider.GetService<SqlServerDbContextConfigurationBuilder>();
+        }
+
         private static DbContext ResolveTenantDbContext<TTenant>(IServiceContext provider,
             DatabaseProvider databaseProvider,
-            MultiTenantDbContextOptions options) where TTenant : class, ITenant
+            MultiTenantDbContextOptions options)
+            where TTenant : class, ITenant
         {
             if (databaseProvider == DatabaseProvider.MySql)
                 return provider.GetService<TenantMySqlDbContext>();

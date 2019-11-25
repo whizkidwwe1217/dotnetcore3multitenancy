@@ -1,0 +1,2 @@
+Migrations:
+    ☐ When dropping a catalog or when deleting a dedicated tenant, all dedicated database must be deleted as well.
