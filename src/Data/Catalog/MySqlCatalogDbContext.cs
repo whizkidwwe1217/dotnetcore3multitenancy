@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace HordeFlow.Data.Catalog
 {
-    public class SqlServerCatalogDbContext : CatalogDbContext<SqlServerCatalogDbContext>
+    public class MySqlCatalogDbContext : CatalogDbContext<MySqlCatalogDbContext>
     {
-        public SqlServerCatalogDbContext(IConfiguration configuration, DbContextOptions<SqlServerCatalogDbContext> options)
+        public MySqlCatalogDbContext(IConfiguration configuration, DbContextOptions<MySqlCatalogDbContext> options)
             : base(configuration, options)
         {
         }
@@ -16,10 +18,9 @@ namespace HordeFlow.Data.Catalog
             var edition = configuration.GetValue("SQLEdition", "Latest");
             var migrationsAssembly = configuration.GetValue<string>("MigrationsAssembly", "Migrations");
 
-            optionsBuilder.UseSqlServer(connectionString, options =>
+            optionsBuilder.UseMySql(connectionString, options =>
             {
-                if (edition.ToUpper().Equals("SQL2008R2"))
-                    options.UseRowNumberForPaging(true);
+                options.ServerVersion(new Version(5, 7, 17), ServerType.MySql); // replace with your Server Version and Type
                 options.MigrationsAssembly(migrationsAssembly);
             });
         }

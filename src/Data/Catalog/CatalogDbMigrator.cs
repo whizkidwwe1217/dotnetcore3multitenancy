@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using HordeFlow.Core;
 
 namespace HordeFlow.Data.Catalog
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Hris.Migrations.MySql
+namespace Hris.Migrations.Catalog.MySql
 {
-    public partial class Database_Migration_MySql_201912071703 : Migration
+    public partial class Database_Migration_MySql_Catalog_201912071758 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

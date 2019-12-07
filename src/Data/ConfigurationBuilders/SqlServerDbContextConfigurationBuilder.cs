@@ -32,9 +32,7 @@ namespace HordeFlow.Data
             optionsBuilder.UseSqlServer(connectionString, options =>
             {
                 if (edition.ToUpper().Equals("SQL2008R2"))
-                {
                     options.UseRowNumberForPaging(true);
-                }
 
                 options.MigrationsAssembly(migrationsAssembly);
             });

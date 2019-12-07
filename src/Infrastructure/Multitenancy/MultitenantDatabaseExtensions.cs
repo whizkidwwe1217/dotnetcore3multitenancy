@@ -20,6 +20,13 @@ namespace HordeFlow.Infrastructure.Multitenancy
     {
         public static ServiceRegistry AddMultiDbContext<TTenant>(this ServiceRegistry services) where TTenant : class, ITenant
         {
+            services.AddDbContext<SqlServerCatalogDbContext>();
+            services.AddDbContext<MySqlCatalogDbContext>();
+            services.AddDbContext<SqliteCatalogDbContext>();
+            services.AddDbContext<TenantSqlServerDbContext>();
+            services.AddDbContext<TenantSqliteDbContext>();
+            services.AddDbContext<TenantMySqlDbContext>();
+
             services.For(typeof(ICatalogStore<TTenant>)).Use(typeof(SqlServerCatalogStore));
             services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
 

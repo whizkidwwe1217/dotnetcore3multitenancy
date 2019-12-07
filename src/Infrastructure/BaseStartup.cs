@@ -34,11 +34,6 @@ namespace HordeFlow.Infrastructure
                 scanner.ConnectImplementationsToTypesClosing(typeof(IRepository<,>));
             });
 
-            services.AddDbContext<SqlServerCatalogDbContext>();
-            services.AddDbContext<TenantSqlServerDbContext>();
-            services.AddDbContext<TenantSqliteDbContext>();
-            services.AddDbContext<TenantMySqlDbContext>();
-
             services.AddLogging();
             services.AddMultitenancy<Tenant, DomainTenantResolver<Tenant>>()
             .AddMultiDbContext<Tenant>();

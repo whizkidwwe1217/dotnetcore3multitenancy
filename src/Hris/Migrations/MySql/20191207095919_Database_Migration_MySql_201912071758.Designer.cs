@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hris.Migrations.MySql
 {
     [DbContext(typeof(TenantMySqlDbContext))]
-    [Migration("20191207090358_Database_Migration_MySql_201912071703")]
-    partial class Database_Migration_MySql_201912071703
+    [Migration("20191207095919_Database_Migration_MySql_201912071758")]
+    partial class Database_Migration_MySql_201912071758
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

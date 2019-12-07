@@ -1,10 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using HordeFlow.Data;
-using HordeFlow.Core;
-using HordeFlow.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HordeFlow.Infrastructure.Controllers
 {

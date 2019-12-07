@@ -3,9 +3,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace HordeFlow.Data.Catalog
 {
-    public class SqlServerCatalogDbContext : CatalogDbContext<SqlServerCatalogDbContext>
+    public class SqliteCatalogDbContext : CatalogDbContext<SqliteCatalogDbContext>
     {
-        public SqlServerCatalogDbContext(IConfiguration configuration, DbContextOptions<SqlServerCatalogDbContext> options)
+        public SqliteCatalogDbContext(IConfiguration configuration, DbContextOptions<SqliteCatalogDbContext> options)
             : base(configuration, options)
         {
         }
@@ -16,10 +16,8 @@ namespace HordeFlow.Data.Catalog
             var edition = configuration.GetValue("SQLEdition", "Latest");
             var migrationsAssembly = configuration.GetValue<string>("MigrationsAssembly", "Migrations");
 
-            optionsBuilder.UseSqlServer(connectionString, options =>
+            optionsBuilder.UseSqlite(connectionString, options =>
             {
-                if (edition.ToUpper().Equals("SQL2008R2"))
-                    options.UseRowNumberForPaging(true);
                 options.MigrationsAssembly(migrationsAssembly);
             });
         }

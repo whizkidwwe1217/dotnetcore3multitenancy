@@ -3,51 +3,48 @@ using System;
 using HordeFlow.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Hris.Migrations.SqlServer
+namespace Hris.Migrations.Sqlite
 {
-    [DbContext(typeof(TenantSqlServerDbContext))]
-    [Migration("20191207090348_Database_Migration_SqlServer_201912071703")]
-    partial class Database_Migration_SqlServer_201912071703
+    [DbContext(typeof(TenantSqliteDbContext))]
+    [Migration("20191207095929_Database_Migration_Sqlite_201912071758")]
+    partial class Database_Migration_Sqlite_201912071758
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "3.1.0");
 
             modelBuilder.Entity("HordeFlow.Core.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("TEXT");
 
                     b.Property<byte[]>("ConcurrencyStamp")
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("BLOB");
 
                     b.Property<DateTime?>("ConcurrencyTimeStamp")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ConnectionString")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("DatabaseProvider")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("HostName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("IsDedicated")
-                        .HasColumnType("bit");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("TEXT")
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
