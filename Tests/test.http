@@ -21,9 +21,9 @@ Content-Type: application/json
 {
     "name": "Tenant 2",
     "hostName": "localhost:8002",
-    "connectionString": "Data Source=.\\Sql2017;Initial Catalog=tenant2; User=sa;Password=masterkey",
-    "databaseProvider": "SqlServer",
-    "isDedicated": false
+    "connectionString": "Data Source=tenant2.db",
+    "databaseProvider": "Sqlite",
+    "isDedicated": true
 }
 ###
 GET {{url}}:8003/api/v1/admin/catalog/json

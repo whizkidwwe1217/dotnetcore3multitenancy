@@ -19,6 +19,8 @@ namespace HordeFlow.Data
         {
             var connectionString = tenant?.ConnectionString;
             var mode = configuration.GetValue<string>("MultitenancyMode", "Single");
+            var migrationsAssembly = configuration.GetValue<string>("MigrationsAssembly", "Migrations");
+
             if (mode == "Single" || mode == "Hybrid")
             {
                 connectionString = configuration.GetConnectionString("Catalog");
@@ -30,6 +32,7 @@ namespace HordeFlow.Data
             optionsBuilder.UseSqlServer(connectionString, options =>
             {
                 options.UseRowNumberForPaging(edition.ToUpper().Equals("SQL2008R2"));
+                options.MigrationsAssembly(migrationsAssembly);
             });
 
             return optionsBuilder;

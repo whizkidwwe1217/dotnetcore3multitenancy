@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using HordeFlow.Core;
+using HordeFlow.Core.Extensions;
+using System;
 
 namespace HordeFlow.Data
 {
@@ -34,10 +36,15 @@ namespace HordeFlow.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
+            var provider = configuration.GetValue<DatabaseProvider>("DatabaseProvider");
+            var edition = configuration.GetValue("SQLEdition", "Latest");
+
+            builder.ApplyDesignTimeConfigurations(AppDomain.CurrentDomain.BaseDirectory, provider == DatabaseProvider.SqlServer);
 
             builder.Entity<Tenant>().Property(e => e.Name).HasMaxLength(50);
             builder.Entity<Tenant>().Property(e => e.DatabaseProvider).HasConversion<string>();
+
+            base.OnModelCreating(builder);
         }
 
         public DbSet<Tenant> Tenant { get; set; }

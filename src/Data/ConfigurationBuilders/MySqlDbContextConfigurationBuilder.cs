@@ -21,17 +21,20 @@ namespace HordeFlow.Data
         {
             var connectionString = tenant?.ConnectionString;
             var mode = configuration.GetValue<string>("MultitenancyMode", "Single");
+            var migrationsAssembly = configuration.GetValue<string>("MigrationsAssembly", "Migrations");
+
             if (mode == "Single" || mode == "Hybrid")
             {
                 connectionString = configuration.GetConnectionString("Catalog");
                 if (mode == "Hybrid" && tenant != null && tenant.IsDedicated)
                     connectionString = tenant.ConnectionString;
             }
-            
+
             optionsBuilder.UseMySql(connectionString,
-                mySqlOptions =>
+                options =>
                 {
-                    mySqlOptions.ServerVersion(new Version(5, 7, 17), ServerType.MySql); // replace with your Server Version and Type
+                    options.ServerVersion(new Version(5, 7, 17), ServerType.MySql); // replace with your Server Version and Type
+                    options.MigrationsAssembly(migrationsAssembly);
                 });
 
             return optionsBuilder;

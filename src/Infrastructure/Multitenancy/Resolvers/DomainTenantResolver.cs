@@ -39,7 +39,7 @@ namespace HordeFlow.Infrastructure.Multitenancy
                 var tenants = await store.GetTenantsAsync(e => e.HostName.ToLower().Equals(hostname.ToLower()));
                 tenant = tenants.FirstOrDefault();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 tenant = null;
             }

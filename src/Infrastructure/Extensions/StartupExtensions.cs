@@ -14,7 +14,7 @@ namespace HordeFlow.Infrastructure.Extensions
             var assemblies = ModuleExtensions.GetReferencingAssemblies(typeof(HordeFlow.Core.IModule).Namespace); // TODO: Needs enhancements
             // var assembly = assemblies.First();
             // builder.AddApplicationPart(assembly);
-            foreach(Assembly assembly in assemblies)
+            foreach (Assembly assembly in assemblies)
             {
                 builder.AddApplicationPart(assembly);
             }

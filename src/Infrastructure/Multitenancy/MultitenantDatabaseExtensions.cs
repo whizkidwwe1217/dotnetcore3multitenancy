@@ -36,7 +36,7 @@ namespace HordeFlow.Infrastructure.Multitenancy
 
                 if (tenant != null)
                 {
-                    if ((options.MultitenancyMode == MultitenancyMode.Single || options.MultitenancyMode == MultitenancyMode.Hybrid) 
+                    if ((options.MultitenancyMode == MultitenancyMode.Single || options.MultitenancyMode == MultitenancyMode.Hybrid)
                         && tenantContext.Properties.ContainsKey("SINGLE_TENTANT_MIGRATION"))
                     {
                         return ResolveConfigurationBuilder(provider, DatabaseProvider.SqlServer);

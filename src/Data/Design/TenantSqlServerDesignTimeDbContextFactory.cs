@@ -6,7 +6,7 @@ namespace HordeFlow.Data.Design
 {
     public class TenantSqlServerDesignTimeDbContextFactory : TenantDesignTimeDbContextFactory<TenantSqlServerDbContext>
     {
-        protected override TenantSqlServerDbContext CreateDbContext(IConfiguration configuration, string provider)
+        protected override TenantSqlServerDbContext CreateDbContext(IConfiguration configuration)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantSqlServerDbContext>();
             var tenant = new Tenant { DatabaseProvider = DatabaseProvider.SqlServer, ConnectionString = ConnectionStringTemplates.SQLSERVER };

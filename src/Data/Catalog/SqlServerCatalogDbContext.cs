@@ -18,10 +18,12 @@ namespace HordeFlow.Data.Catalog
         {
             var connectionString = configuration.GetConnectionString("Catalog");
             var edition = configuration.GetValue("SQLEdition", "Latest");
+            var migrationsAssembly = configuration.GetValue<string>("MigrationsAssembly", "Migrations");
 
             optionsBuilder.UseSqlServer(connectionString, options =>
             {
                 options.UseRowNumberForPaging(edition.ToUpper().Equals("SQL2008R2"));
+                options.MigrationsAssembly(migrationsAssembly);
             });
         }
 

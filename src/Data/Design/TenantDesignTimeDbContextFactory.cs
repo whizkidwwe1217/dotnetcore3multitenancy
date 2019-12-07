@@ -13,11 +13,10 @@ namespace HordeFlow.Data.Design
         public TDbContext CreateDbContext(string[] args)
         {
             var config = GetConfiguration(args);
-            var provider = GetEnvironmentVariable("DatabaseProvider");
-            return CreateDbContext(config, provider);
+            return CreateDbContext(config);
         }
 
-        protected abstract TDbContext CreateDbContext(IConfiguration configuration, string provider);
+        protected abstract TDbContext CreateDbContext(IConfiguration configuration);
 
         protected IConfiguration GetConfiguration(string[] args)
         {
@@ -30,16 +29,16 @@ namespace HordeFlow.Data.Design
             return config;
         }
 
-        protected string GetEnvironmentVariable(string name, string errorMessage = "An error has ocurred in getting the environment variable.")
-        {
-            var value = Environment.GetEnvironmentVariable(name);
+        // protected string GetEnvironmentVariable(string name, string errorMessage = "An error has ocurred in getting the environment variable.")
+        // {
+        //     var value = Environment.GetEnvironmentVariable(name);
 
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                throw new Exception(errorMessage);
-            }
+        //     if (string.IsNullOrWhiteSpace(value))
+        //     {
+        //         throw new Exception(errorMessage);
+        //     }
 
-            return value;
-        }
+        //     return value;
+        // }
     }
 }

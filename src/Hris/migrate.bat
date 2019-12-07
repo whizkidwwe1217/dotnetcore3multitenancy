@@ -17,15 +17,15 @@ FOR /F "skip=1 tokens=1-6" %%A IN ('WMIC Path Win32_LocalTime Get Day^,Hour^,Min
 )
 
 set DatabaseProvider=SqlServer
-dotnet ef migrations add Database_Migration_SqlServer_Catalog_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/Catalog -c SqlServerCatalogDbContext
+dotnet ef migrations add Database_Migration_SqlServer_Catalog_!YEAR!!MON!!DAY!!HOUR!!MIN! -o Migrations/Catalog -c SqlServerCatalogDbContext
 
 set DatabaseProvider=SqlServer
-dotnet ef migrations add Database_Migration_SqlServer_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/SqlServer -c TenantSqlServerDbContext
+dotnet ef migrations add Database_Migration_SqlServer_!YEAR!!MON!!DAY!!HOUR!!MIN! -o Migrations/SqlServer -c TenantSqlServerDbContext
 
 set DatabaseProvider=MySql
-dotnet ef migrations add Database_Migration_MySql_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/MySql -c TenantMySqlDbContext
+dotnet ef migrations add Database_Migration_MySql_!YEAR!!MON!!DAY!!HOUR!!MIN! -o Migrations/MySql -c TenantMySqlDbContext
 
 set DatabaseProvider=Sqlite
-dotnet ef migrations add Database_Migration_Sqlite_!YEAR!!MON!!DAY!!HOUR!!MIN! -o src/Migrations/Sqlite -c TenantSqliteDbContext
+dotnet ef migrations add Database_Migration_Sqlite_!YEAR!!MON!!DAY!!HOUR!!MIN! -o Migrations/Sqlite -c TenantSqliteDbContext
 
 pause

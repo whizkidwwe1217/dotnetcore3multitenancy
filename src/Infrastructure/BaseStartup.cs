@@ -1,4 +1,6 @@
 using HordeFlow.Core;
+using HordeFlow.Data;
+using HordeFlow.Data.Catalog;
 using HordeFlow.Infrastructure.Extensions;
 using HordeFlow.Infrastructure.Multitenancy;
 using HordeFlow.Infrastructure.Repositories;
@@ -32,10 +34,14 @@ namespace HordeFlow.Infrastructure
                 scanner.ConnectImplementationsToTypesClosing(typeof(IRepository<,>));
             });
 
+            services.AddDbContext<SqlServerCatalogDbContext>();
+            services.AddDbContext<TenantSqlServerDbContext>();
+            services.AddDbContext<TenantSqliteDbContext>();
+            services.AddDbContext<TenantMySqlDbContext>();
+
             services.AddLogging();
             services.AddMultitenancy<Tenant, DomainTenantResolver<Tenant>>()
             .AddMultiDbContext<Tenant>();
-
             // services.AddHealthChecks()
             // .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
         }

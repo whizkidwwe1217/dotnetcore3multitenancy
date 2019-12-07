@@ -19,14 +19,16 @@ namespace HordeFlow.Data
         {
             var connectionString = tenant?.ConnectionString;
             var mode = configuration.GetValue<string>("MultitenancyMode", "Single");
+            var migrationsAssembly = configuration.GetValue<string>("MigrationsAssembly", "Migrations");
+
             if (mode == "Single" || mode == "Hybrid")
             {
                 connectionString = configuration.GetConnectionString("Catalog");
                 if (mode == "Hybrid" && tenant != null && tenant.IsDedicated)
                     connectionString = tenant.ConnectionString;
             }
-            
-            optionsBuilder.UseSqlite(connectionString);
+
+            optionsBuilder.UseSqlite(connectionString, options => options.MigrationsAssembly(migrationsAssembly));
             return optionsBuilder;
         }
     }
