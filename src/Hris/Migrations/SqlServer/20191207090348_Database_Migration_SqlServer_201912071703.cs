@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Hris.Migrations.Sqlite
+namespace Hris.Migrations.SqlServer
 {
-    public partial class Database_Migration_Sqlite_201912071452 : Migration
+    public partial class Database_Migration_SqlServer_201912071703 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

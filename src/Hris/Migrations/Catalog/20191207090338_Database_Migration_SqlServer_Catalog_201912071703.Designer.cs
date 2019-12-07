@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hris.Migrations.Catalog
 {
     [DbContext(typeof(SqlServerCatalogDbContext))]
-    [Migration("20191207065211_Database_Migration_SqlServer_Catalog_201912071452")]
-    partial class Database_Migration_SqlServer_Catalog_201912071452
+    [Migration("20191207090338_Database_Migration_SqlServer_Catalog_201912071703")]
+    partial class Database_Migration_SqlServer_Catalog_201912071703
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

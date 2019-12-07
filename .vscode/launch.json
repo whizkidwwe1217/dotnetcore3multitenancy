@@ -10,7 +10,7 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/src/Hris/bin/Debug/netcoreapp3.0/HordeFlow.Hris.dll",
+      "program": "${workspaceFolder}/src/Hris/bin/Debug/netcoreapp3.1/HordeFlow.Hris.dll",
       "args": [],
       "cwd": "${workspaceFolder}/src/Hris",
       "stopAtEntry": false,

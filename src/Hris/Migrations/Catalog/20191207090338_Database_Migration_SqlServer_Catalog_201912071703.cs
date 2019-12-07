@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Hris.Migrations.Catalog
 {
-    public partial class Database_Migration_SqlServer_Catalog_201912071452 : Migration
+    public partial class Database_Migration_SqlServer_Catalog_201912071703 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

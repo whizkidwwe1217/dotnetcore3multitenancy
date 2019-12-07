@@ -31,7 +31,11 @@ namespace HordeFlow.Data
             var edition = configuration.GetValue("SQLEdition", "Latest");
             optionsBuilder.UseSqlServer(connectionString, options =>
             {
-                options.UseRowNumberForPaging(edition.ToUpper().Equals("SQL2008R2"));
+                if (edition.ToUpper().Equals("SQL2008R2"))
+                {
+                    options.UseRowNumberForPaging(true);
+                }
+
                 options.MigrationsAssembly(migrationsAssembly);
             });
 
