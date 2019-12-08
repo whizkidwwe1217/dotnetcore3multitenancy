@@ -1,19 +1,16 @@
-using System.IO;
-using System.Reflection;
 using HordeFlow.Core;
-using HordeFlow.Data;
-using HordeFlow.Data.Catalog;
 using HordeFlow.Infrastructure.Extensions;
+using HordeFlow.Infrastructure.HealthChecks;
 using HordeFlow.Infrastructure.Multitenancy;
 using HordeFlow.Infrastructure.Repositories;
 using HordeFlow.Infrastructure.Swagger;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -42,17 +39,19 @@ namespace HordeFlow.Infrastructure
             });
 
             services.AddLogging();
-            services.AddMultitenancy<Tenant, DomainTenantResolver<Tenant>>()
-            .AddMultiDbContext<Tenant>();
-            // services.AddHealthChecks()
-            // .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
+            services
+            .AddMultitenancy<Tenant, DomainTenantResolver<Tenant>>()
+            .AddMultiDbContext<Tenant>()
+            .AddHealthChecks()
+            .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddApiVersioning()
+            // services.AddMvc();
+            services
+            .AddApiVersioning()
             .AddControllers()
             .AddNewtonsoftJson()
             .AddXmlSerializerFormatters()
@@ -104,9 +103,11 @@ namespace HordeFlow.Infrastructure
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                // endpoints.MapHealthChecks(Configuration.GetSection("HealthChecks").GetValue<string>("Endpoint"))
-                //     .RequireHost(Configuration.GetSection("HealthChecks").GetValue<string>("HostFilter"));
+                endpoints
+                .MapHealthChecks(Configuration.GetSection("HealthChecks").GetValue<string>("Endpoint"))
+                .RequireHost(Configuration.GetSection("HealthChecks").GetValue<string>("HostFilter"));
             });
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
