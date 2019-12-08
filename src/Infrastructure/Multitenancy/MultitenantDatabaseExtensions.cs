@@ -27,8 +27,22 @@ namespace HordeFlow.Infrastructure.Multitenancy
             services.AddDbContext<TenantSqliteDbContext>();
             services.AddDbContext<TenantMySqlDbContext>();
 
-            services.For(typeof(ICatalogStore<TTenant>)).Use(typeof(SqlServerCatalogStore));
             services.For(typeof(IRepositoryManager<>)).Use(typeof(RepositoryManager<>));
+
+            // services.For(typeof(ICatalogStore<TTenant>)).Use(typeof(SqlServerCatalogStore));
+
+            services.For<ICatalogStore<TTenant>>().Use(provider =>
+            {
+                var config = provider.GetRequiredService<IConfiguration>();
+                var databaseProvider = config.GetValue<DatabaseProvider>("DatabaseProvider", DatabaseProvider.SqlServer);
+                if (databaseProvider == DatabaseProvider.SqlServer)
+                    return provider.GetService<SqlServerCatalogStore<TTenant>>();
+                else if (databaseProvider == DatabaseProvider.MySql)
+                    return provider.GetService<MySqlCatalogStore<TTenant>>();
+                else if (databaseProvider == DatabaseProvider.Sqlite)
+                    return provider.GetService<SqliteCatalogStore<TTenant>>();
+                return provider.GetService<SqlServerCatalogStore<TTenant>>();
+            });
 
             services.For<IDbContextConfigurationBuilder>().Use(provider =>
             {
@@ -69,6 +83,8 @@ namespace HordeFlow.Infrastructure.Multitenancy
                 var tenantContext = provider.GetService<TenantContext<TTenant>>();
                 var config = provider.GetRequiredService<IConfiguration>();
                 var mode = config.GetValue<MultitenancyMode>("MultitenancyMode", MultitenancyMode.Single);
+                var databaseProvider = config.GetValue<DatabaseProvider>("DatabaseProvider", DatabaseProvider.SqlServer);
+
                 var options = new MultiTenantDbContextOptions
                 {
                     MultitenancyMode = mode
@@ -78,13 +94,29 @@ namespace HordeFlow.Infrastructure.Multitenancy
                 {
                     if (tenantContext.Properties.ContainsKey("SINGLE_TENANT_MIGRATION"))
                     {
+                        if (tenant == null)
+                        {
+                            if (databaseProvider == DatabaseProvider.MySql)
+                                return provider.GetService<MySqlCatalogDbContext>();
+                            else if (databaseProvider == DatabaseProvider.Sqlite)
+                                return provider.GetService<SqliteCatalogDbContext>();
+                            else
+                                return provider.GetService<SqlServerCatalogDbContext>();
+                        }
                         return ResolveTenantDbContext<TTenant>(provider, DatabaseProvider.SqlServer, options);
                     }
                 }
 
                 // Is catalog
                 if (tenant == null)
-                    return provider.GetService<SqlServerCatalogDbContext>();
+                {
+                    if (databaseProvider == DatabaseProvider.MySql)
+                        return provider.GetService<MySqlCatalogDbContext>();
+                    else if (databaseProvider == DatabaseProvider.Sqlite)
+                        return provider.GetService<SqliteCatalogDbContext>();
+                    else
+                        return provider.GetService<SqlServerCatalogDbContext>();
+                }
 
                 return ResolveTenantDbContext<TTenant>(provider, tenant.DatabaseProvider, options);
 

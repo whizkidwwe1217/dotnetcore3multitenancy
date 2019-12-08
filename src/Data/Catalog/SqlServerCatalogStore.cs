@@ -9,7 +9,8 @@ using HordeFlow.Core;
 
 namespace HordeFlow.Data.Catalog
 {
-    public class SqlServerCatalogStore : ICatalogStore<Tenant>
+    public class SqlServerCatalogStore<TTenant> : ICatalogStore<TTenant>
+        where TTenant : class
     {
         private readonly SqlServerCatalogDbContext context;
 
@@ -18,12 +19,53 @@ namespace HordeFlow.Data.Catalog
             this.context = context;
         }
 
-        public async Task<List<Tenant>> GetTenantsAsync(Expression<Func<Tenant, bool>> predicate = null,
+        public SqlServerCatalogDbContext Context => context;
+
+        public async Task<List<TTenant>> GetTenantsAsync(Expression<Func<TTenant, bool>> predicate = null,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             if (predicate != null)
-                return await context.Set<Tenant>().AsNoTracking().Where(predicate).ToListAsync();
-            return await context.Set<Tenant>().AsNoTracking().ToListAsync();
+                return await Context.Set<TTenant>().AsNoTracking().Where(predicate).ToListAsync();
+            return await Context.Set<TTenant>().AsNoTracking().ToListAsync();
+        }
+    }
+
+    public class MySqlCatalogStore<TTenant> : ICatalogStore<TTenant> where TTenant : class
+    {
+        private readonly MySqlCatalogDbContext context;
+
+        public MySqlCatalogStore(MySqlCatalogDbContext context)
+        {
+            this.context = context;
+        }
+
+        public MySqlCatalogDbContext Context => context;
+
+        public async Task<List<TTenant>> GetTenantsAsync(Expression<Func<TTenant, bool>> predicate = null,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (predicate != null)
+                return await context.Set<TTenant>().AsNoTracking().Where(predicate).ToListAsync();
+            return await context.Set<TTenant>().AsNoTracking().ToListAsync();
+        }
+    }
+    public class SqliteCatalogStore<TTenant> : ICatalogStore<TTenant> where TTenant : class
+    {
+        private readonly SqliteCatalogDbContext context;
+
+        public SqliteCatalogStore(SqliteCatalogDbContext context)
+        {
+            this.context = context;
+        }
+
+        public SqliteCatalogDbContext Context => context;
+
+        public async Task<List<TTenant>> GetTenantsAsync(Expression<Func<TTenant, bool>> predicate = null,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (predicate != null)
+                return await context.Set<TTenant>().AsNoTracking().Where(predicate).ToListAsync();
+            return await context.Set<TTenant>().AsNoTracking().ToListAsync();
         }
     }
 }

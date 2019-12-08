@@ -28,7 +28,7 @@ Content-Type: application/json
 ###
 GET {{url}}:8000/api/v1/admin/catalog/json
 ###
-POST {{url}}:8000/api/v1/tenant/migrate
+POST {{url}}:8001/api/v1/tenant/migrate
 ###
 POST {{url}}:8002/api/v1/tenant/migrate
 ###
@@ -38,7 +38,7 @@ Accept: application/xml
 GET {{url}}:8002/api/v2.2/application/potatoes
 Accept: application/json
 ###
-POST {{url}}:8001/api/v1/tenant/drop
+POST {{url}}:8003/api/v1/tenant/drop
 ###
 POST {{url}}:8003/api/v1/admin/catalog/drop
 ###
