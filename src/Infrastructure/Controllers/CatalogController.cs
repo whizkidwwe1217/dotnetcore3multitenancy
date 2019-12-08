@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace HordeFlow.Infrastructure.Controllers
 {
     [ApiController]
-    [Route("api/v1/admin/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/admin/[controller]")]
     [FormatFilter]
     public class CatalogController : ControllerBase
     {

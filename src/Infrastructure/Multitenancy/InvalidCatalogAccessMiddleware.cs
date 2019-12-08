@@ -38,7 +38,12 @@ namespace HordeFlow.Infrastructure.Multitenancy
                 context.Response.StatusCode = 404;
             }
             else
-                await this.next.Invoke(context);
+            {
+                if (tenant == null && !IsAccessingCatalogPath(context.Request.Path))
+                    context.Response.StatusCode = 404;
+                else
+                    await this.next.Invoke(context);
+            }
         }
     }
 }

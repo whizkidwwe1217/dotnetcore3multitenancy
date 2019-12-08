@@ -12,7 +12,7 @@ Content-Type: application/json
     "hostName": "localhost:8001",
     "connectionString": "Data Source=.\\Sql2017;Initial Catalog=tenant1; User=sa;Password=masterkey",
     "databaseProvider": "SqlServer",
-    "isDedicated": true
+    "isDedicated": false
 }
 ###
 POST {{url}}:8003/api/v1/admin/catalog
@@ -26,30 +26,30 @@ Content-Type: application/json
     "isDedicated": true
 }
 ###
-GET {{url}}:8003/api/v1/admin/catalog/json
+GET {{url}}:8000/api/v1/admin/catalog/json
 ###
-POST {{url}}:8001/api/v1/tenant/migrate
+POST {{url}}:8000/api/v1/tenant/migrate
 ###
 POST {{url}}:8002/api/v1/tenant/migrate
 ###
-GET {{url}}:8001/api/v1/customer
+GET {{url}}:8001/api/v1/application
 Accept: application/xml
 ###
-GET {{url}}:8002/api/v1/customer
+GET {{url}}:8002/api/v2/application/potatoes
 Accept: application/json
 ###
 POST {{url}}:8001/api/v1/tenant/drop
 ###
 POST {{url}}:8003/api/v1/admin/catalog/drop
 ###
-GET https://irely.{{dns}}/api/v1/customer
+GET https://irely.{{dns}}/api/v1/application
 ###
 ###
-GET https://irely.{{dns}}/api/v1/customer
+GET https://irely.{{dns}}/api/v1/application
 ###
-GET https://hordeflow.{{dns}}/api/v1/customer
+GET https://hordeflow.{{dns}}/api/v1/application
 ###
-GET https://xyz.{{dns}}/api/v1/customer
+GET https://xyz.{{dns}}/api/v1/application
 ###
 GET {{url}}:8000/health
 ###

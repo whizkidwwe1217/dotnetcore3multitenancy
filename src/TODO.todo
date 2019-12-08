@@ -1,2 +1,4 @@
 Migrations:
     ☐ When dropping a catalog or when deleting a dedicated tenant, all dedicated database must be deleted as well.
+
+    https://github.com/microsoft/aspnet-api-versioning/blob/master/samples/aspnetcore/SwaggerSample/Startup.cs
