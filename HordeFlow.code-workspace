@@ -1,0 +1,28 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "tests"
+    }
+  ],
+  "settings": {
+    "sqltools.connections": [
+      {
+        "connectString": "Data Source=.\\SQL2017;Initial Catalog=multitenancy;User=sa;Password=masterkey;",
+        "connectionTimeout": 30,
+        "dialect": "MSSQL",
+        "isActive": false,
+        "isConnected": false,
+        "name": "MSSQL"
+      },
+      {
+        "database": "${workspaceFolder}\\Malfo.db",
+        "dialect": "SQLite",
+        "name": "Sqlite"
+      }
+    ],
+    "sqltools.useNodeRuntime": true
+  }
+}

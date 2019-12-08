@@ -37,7 +37,6 @@ namespace HordeFlow.Infrastructure.Extensions
             services
             .AddHealthChecks()
             .AddCheck("ping1", new PingHealthCheck("www.google.com", 100))
-            .AddCheck("ping2", new PingHealthCheck("www.bing.com", 100))
             .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
 
             return services;
