@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HordeFlow.Hris.Controllers
 {
+    [ApiVersion("2.2")]
     [ApiVersion("2.0")]
     [ApiVersion("1.0", Deprecated = true)]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -24,5 +25,9 @@ namespace HordeFlow.Hris.Controllers
         [MapToApiVersion("2")]
         [Route("Potatoes")]
         public string GetPotatoesV2() => "Space Potatoes v2";
+        [HttpGet]
+        [MapToApiVersion("2.2")]
+        [Route("Potatoes")]
+        public string GetPotatoesV22() => "Space Potatoes v2.2";
     }
 }

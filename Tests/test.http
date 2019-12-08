@@ -35,7 +35,7 @@ POST {{url}}:8002/api/v1/tenant/migrate
 GET {{url}}:8001/api/v1/application
 Accept: application/xml
 ###
-GET {{url}}:8002/api/v2/application/potatoes
+GET {{url}}:8002/api/v2.2/application/potatoes
 Accept: application/json
 ###
 POST {{url}}:8001/api/v1/tenant/drop

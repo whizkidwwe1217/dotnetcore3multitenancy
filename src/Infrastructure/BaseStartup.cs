@@ -1,19 +1,14 @@
 using HordeFlow.Core;
 using HordeFlow.Infrastructure.Extensions;
-using HordeFlow.Infrastructure.HealthChecks;
 using HordeFlow.Infrastructure.Multitenancy;
 using HordeFlow.Infrastructure.Repositories;
-using HordeFlow.Infrastructure.Swagger;
 using Lamar;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace HordeFlow.Infrastructure
 {
@@ -42,8 +37,7 @@ namespace HordeFlow.Infrastructure
             services
             .AddMultitenancy<Tenant, DomainTenantResolver<Tenant>>()
             .AddMultiDbContext<Tenant>()
-            .AddHealthChecks()
-            .AddCheck<TenantDbHealthCheck>("tenant-db-health", failureStatus: HealthStatus.Degraded);
+            .AddApiHealthChecks();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -72,12 +66,8 @@ namespace HordeFlow.Infrastructure
                 // can also be used to control the format of the API version in route templates
                 options.SubstituteApiVersionInUrl = true;
             });
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddSwaggerGen(options =>
-            {
-                // add a custom operation filter which sets default values
-                options.OperationFilter<SwaggerDefaultValues>();
-            });
+
+            services.AddSwaggerApiExplorer();
 
             ConfigureOtherServices(services);
         }
@@ -103,35 +93,20 @@ namespace HordeFlow.Infrastructure
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints
-                .MapHealthChecks(Configuration.GetSection("HealthChecks").GetValue<string>("Endpoint"))
-                .RequireHost(Configuration.GetSection("HealthChecks").GetValue<string>("HostFilter"));
+                endpoints.MapApiHealthChecks(Configuration);
             });
 
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                // build a swagger endpoint for each discovered API version
-                foreach (var description in provider.ApiVersionDescriptions)
-                {
-                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-                }
-
-                options.RoutePrefix = string.Empty;
-            });
+            app.UseSwaggerApiExplorer(provider);
 
             ConfigureExtras(app, env, provider);
         }
 
-        protected virtual void ConfigureOtherServices(IServiceCollection services)
-        {
+        protected virtual void ConfigureOtherServices(IServiceCollection services) { }
 
-        }
-
-        protected virtual void ConfigureExtras(IApplicationBuilder app, IWebHostEnvironment env,
+        protected virtual void ConfigureExtras(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
             IApiVersionDescriptionProvider provider)
-        {
-
-        }
+        { }
     }
 }
