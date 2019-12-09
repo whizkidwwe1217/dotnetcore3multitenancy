@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     [TestCaseOrderer(CustomTestCaseOrderer.TypeName, CustomTestCaseOrderer.AssembyName)]
     public abstract class BaseClassFixture : IClassFixture<WebApiFactory<TestStartup>>, IAsyncLifetime

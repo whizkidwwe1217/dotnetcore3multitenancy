@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Lamar.Microsoft.DependencyInjection;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     public class WebApiFactory<TStartup> : WebApplicationFactory<TStartup>
         where TStartup : class

@@ -1,7 +1,7 @@
 using HordeFlow.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     public class TestStartup : BaseStartup
     {

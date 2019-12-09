@@ -58,7 +58,7 @@ namespace HordeFlow.Infrastructure.Multitenancy
                 if (tenant != null)
                 {
                     if ((options.MultitenancyMode == MultitenancyMode.Single || options.MultitenancyMode == MultitenancyMode.Hybrid)
-                        && tenantContext.Properties.ContainsKey("SINGLE_TENTANT_MIGRATION"))
+                        && tenantContext != null && tenantContext.Properties.ContainsKey("SINGLE_TENTANT_MIGRATION"))
                     {
                         return ResolveConfigurationBuilder(provider, DatabaseProvider.SqlServer);
                     }
@@ -92,7 +92,7 @@ namespace HordeFlow.Infrastructure.Multitenancy
 
                 if (options.MultitenancyMode == MultitenancyMode.Single || options.MultitenancyMode == MultitenancyMode.Hybrid)
                 {
-                    if (tenantContext.Properties.ContainsKey("SINGLE_TENANT_MIGRATION"))
+                    if (tenantContext != null && tenantContext.Properties.ContainsKey("SINGLE_TENANT_MIGRATION"))
                     {
                         if (tenant == null)
                         {
