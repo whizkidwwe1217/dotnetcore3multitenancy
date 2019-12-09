@@ -18,7 +18,7 @@ namespace IntegrationTests
     {
         public TestMultitenancyMigrations(WebApiFactory<TestStartup> factory) : base(factory)
         {
-            
+
         }
 
         [Fact, Order(0)]
@@ -31,7 +31,7 @@ namespace IntegrationTests
                 DatabaseProvider = DatabaseProvider.Sqlite,
                 ConnectionString = "Data Source=tenant1.test.db"
             };
-            
+
             var tenant2 = new Tenant
             {
                 Name = "Tenant 2",

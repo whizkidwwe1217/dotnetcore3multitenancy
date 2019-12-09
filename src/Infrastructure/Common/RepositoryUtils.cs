@@ -137,10 +137,16 @@ namespace HordeFlow.Core.Common
             return sb.ToString().Substring(0, sb.ToString().Length - 1);
         }
 
-        public static Exception CreateInnerException<TEntity, TKey>(this BaseRepository<TKey, TEntity> repository, string message, Exception exception)
+        public static Exception CreateInnerException<TEntity, TKey>(this IRepository<TEntity, TKey> repository, string message, Exception exception)
             where TEntity : class, IBaseEntity<TKey>, new()
         {
             return new Exception($"{message}. Error details: {exception.Message} {(exception.InnerException != null ? " " + exception.InnerException.Message : "")}");
+        }
+
+        public static void ThrowException<TEntity, TKey>(this IRepository<TEntity, TKey> repository, string message, Exception exception)
+            where TEntity : class, IBaseEntity<TKey>, new()
+        {
+            throw new Exception($"{message}. Error details: {exception.Message} {(exception.InnerException != null ? " " + exception.InnerException.Message : "")}");
         }
     }
 }

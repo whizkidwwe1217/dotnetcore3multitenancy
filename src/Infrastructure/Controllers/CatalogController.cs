@@ -5,6 +5,7 @@ using HordeFlow.Data;
 using HordeFlow.Core;
 using HordeFlow.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 
 namespace HordeFlow.Infrastructure.Controllers
 {
@@ -14,10 +15,10 @@ namespace HordeFlow.Infrastructure.Controllers
     [FormatFilter]
     public class CatalogController : ControllerBase
     {
-        private readonly IRepository<Guid, Tenant> repository;
+        private readonly IRepository<Tenant, Guid> repository;
         private readonly IDbMigrator migrator;
 
-        public CatalogController(IRepository<Guid, Tenant> repository, IDbMigrator migrator)
+        public CatalogController(IRepository<Tenant, Guid> repository, IDbMigrator migrator)
         {
             this.repository = repository;
             this.migrator = migrator;
@@ -35,8 +36,15 @@ namespace HordeFlow.Infrastructure.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Migrate(CancellationToken cancellationToken = default(CancellationToken))
         {
-            await migrator.MigrateAsync(cancellationToken);
-            return Ok(true);
+            try
+            {
+                await migrator.MigrateAsync(cancellationToken);
+                return Ok(true);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPost]

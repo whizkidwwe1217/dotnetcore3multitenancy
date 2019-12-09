@@ -3,7 +3,7 @@ using System.Linq;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     public class DisplayNameOrderer : ITestCollectionOrderer
     {

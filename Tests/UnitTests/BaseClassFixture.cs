@@ -24,7 +24,7 @@ namespace UnitTests
             return await Client.PostAsync(requestUrl, stringContent);
         }
 
-        public Task InitializeAsync() => PostAsJsonAsync($"{catalogHost}/admin/catalog/migrate", new StringContent(""));
-        public Task DisposeAsync() => Client.PostAsync($"{catalogHost}/admin/catalog/drop", new StringContent(""));
+        public virtual async Task InitializeAsync() => await PostAsJsonAsync($"{catalogHost}/admin/catalog/migrate", new StringContent(""));
+        public virtual async Task DisposeAsync() => await Client.PostAsync($"{catalogHost}/admin/catalog/drop", new StringContent(""));
     }
 }

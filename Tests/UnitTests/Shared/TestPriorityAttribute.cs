@@ -1,6 +1,6 @@
 using System;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class TestPriorityAttribute : Attribute

@@ -5,16 +5,16 @@ using System.Reflection;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     /// <summary>
     /// Custom xUnit test collection orderer that uses the OrderAttribute
     /// </summary>
     public class CustomTestCollectionOrderer : ITestCollectionOrderer
     {
-        public const string TypeName = "IntegrationTests.CustomTestCollectionOrderer";
+        public const string TypeName = "UnitTests.CustomTestCollectionOrderer";
 
-        public const string AssembyName = "IntegrationTests";
+        public const string AssembyName = "UnitTests";
 
         public IEnumerable<ITestCollection> OrderTestCollections(
             IEnumerable<ITestCollection> testCollections)

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HordeFlow.Infrastructure.Repositories
 {
-    public interface IRepository<TKey, TEntity> where TEntity : class, IBaseEntity<TKey>, new()
+    public interface IRepository<TEntity, TKey> where TEntity : class, IBaseEntity<TKey>, new()
     {
         IQueryable<TEntity> Get();
         IQueryable<TEntity> Get(Expression<Func<TEntity, bool>> predicate);

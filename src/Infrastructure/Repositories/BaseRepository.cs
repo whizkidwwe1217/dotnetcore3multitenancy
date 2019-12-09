@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HordeFlow.Infrastructure.Repositories
 {
-    public abstract class BaseRepository<TKey, TEntity> : IRepository<TKey, TEntity>
+    public abstract class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey>
         where TEntity : class, IBaseEntity<TKey>, new()
     {
         private const string Action = "Update";

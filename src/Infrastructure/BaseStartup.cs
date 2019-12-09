@@ -27,10 +27,6 @@ namespace HordeFlow.Infrastructure
             {
                 scanner.TheCallingAssembly();
                 scanner.WithDefaultConventions();
-                scanner.AddAllTypesOf(typeof(IRepositoryManager<>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IRepositoryManager<>));
-                scanner.AddAllTypesOf(typeof(IRepository<,>));
-                scanner.ConnectImplementationsToTypesClosing(typeof(IRepository<,>));
             });
 
             services.AddLogging();
@@ -38,6 +34,8 @@ namespace HordeFlow.Infrastructure
             .AddMultitenancy<Tenant, DomainTenantResolver<Tenant>>()
             .AddMultiDbContext<Tenant>()
             .AddApiHealthChecks();
+
+            ConfigureOtherContainerServices(services);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -102,6 +100,7 @@ namespace HordeFlow.Infrastructure
         }
 
         protected virtual void ConfigureOtherServices(IServiceCollection services) { }
+        protected virtual void ConfigureOtherContainerServices(ServiceRegistry services) { }
 
         protected virtual void ConfigureExtras(
             IApplicationBuilder app,

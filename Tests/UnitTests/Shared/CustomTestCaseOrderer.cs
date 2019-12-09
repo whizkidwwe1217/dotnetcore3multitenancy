@@ -5,7 +5,7 @@ using System.Reflection;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     /// <summary>
     /// Custom xUnit test case orderer that uses the OrderAttribute

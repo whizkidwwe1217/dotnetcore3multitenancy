@@ -4,7 +4,7 @@ using System.Linq;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace IntegrationTests
+namespace UnitTests
 {
     public class AlphabeticalOrderer : ITestCaseOrderer
     {
