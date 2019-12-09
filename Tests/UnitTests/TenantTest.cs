@@ -2,6 +2,7 @@ using System;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using HordeFlow.Infrastructure.Controllers;
+using System.Threading.Tasks;
 
 namespace UnitTests
 {
@@ -12,10 +13,12 @@ namespace UnitTests
         }
 
         [Fact]
-        public void ListTenants()
+        public async Task ListTenants()
         {
             var catalog = factory.Services.GetRequiredService<CatalogController>();
             Assert.NotNull(catalog);
+
+            await catalog.Migrate();
         }
     }
 }

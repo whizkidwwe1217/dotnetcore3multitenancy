@@ -6,7 +6,6 @@ using Xunit;
 
 namespace UnitTests
 {
-    [TestCaseOrderer(CustomTestCaseOrderer.TypeName, CustomTestCaseOrderer.AssembyName)]
     public abstract class BaseClassFixture : IClassFixture<WebApiFactory<TestStartup>>, IAsyncLifetime
     {
         protected string catalogHost = "https://localhost:8000/api/v1";
