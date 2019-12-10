@@ -1,4 +1,4 @@
-namespace HordeFlow.Core
+namespace HordeFlow.Core.Models
 {
     public enum DatabaseProvider
     {

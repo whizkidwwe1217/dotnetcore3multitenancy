@@ -191,6 +191,12 @@ namespace HordeFlow.Core.Common
 
             switch (this.Operator)
             {
+                case FilterRuleOperator.Blank:
+                    constant = Expression.Constant("", pi.PropertyType);
+                    return Expression.Or(Expression.Equal(member, constant), Expression.Equal(member, Expression.Constant(null, pi.PropertyType)));
+                case FilterRuleOperator.NotBlank:
+                    constant = Expression.Constant("", pi.PropertyType);
+                    return Expression.Not(Expression.Or(Expression.Equal(member, constant), Expression.Equal(member, Expression.Constant(null, pi.PropertyType))));
                 case FilterRuleOperator.IsNull: // it's the same for null
                 case FilterRuleOperator.Equals:
                     return Expression.Equal(member, constant);
@@ -303,7 +309,9 @@ namespace HordeFlow.Core.Common
         LessThan,
         GreaterThan,
         LessThanOrEqual,
-        GreaterThanOrEqual
+        GreaterThanOrEqual,
+        Blank,
+        NotBlank
     }
 
     public static class WebHelper
@@ -473,6 +481,8 @@ namespace HordeFlow.Core.Common
                         case FilterRuleOperator.NotEqual: opString = "ne"; break;
                         case FilterRuleOperator.NotNull: opString = "nn"; break;
                         case FilterRuleOperator.StartsWith: opString = "bw"; break;
+                        case FilterRuleOperator.Blank: opString = "bk"; break;
+                        case FilterRuleOperator.NotBlank: opString = "nb"; break;
                     }
 
                     json += "{ \"field\": \"" + r.Field + "\", \"op\": \"" + opString + "\", \"data\": \"" + r.Data + "\" }";
@@ -538,6 +548,8 @@ namespace HordeFlow.Core.Common
                 case "ne": r.Operator = FilterRuleOperator.NotEqual; break;
                 case "nn": r.Operator = FilterRuleOperator.NotNull; break;
                 case "bw": r.Operator = FilterRuleOperator.StartsWith; break;
+                case "bk": r.Operator = FilterRuleOperator.Blank; break;
+                case "nb": r.Operator = FilterRuleOperator.NotBlank; break;
             }
 
             return r;

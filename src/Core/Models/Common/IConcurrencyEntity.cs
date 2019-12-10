@@ -1,6 +1,6 @@
 using System;
 
-namespace HordeFlow.Core
+namespace HordeFlow.Core.Models.Common
 {
     public interface IConcurrencyEntity
     {
